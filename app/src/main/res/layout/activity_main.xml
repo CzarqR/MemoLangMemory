@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/banner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8F2E2E"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/txtPlayers"
+        android:layout_width="129dp"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/butSelectPlayers"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/butSelectPlayers"
+        app:layout_constraintTop_toTopOf="@+id/butSelectPlayers" />
+
+    <Button
+        android:id="@+id/butSelectGM"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/menuButtonBack"
+        android:onClick="butSelectGMClick"
+        android:text="@string/gameMode"
+        android:textColor="@color/menuButtonText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgDeck" />
+
+    <Button
+        android:id="@+id/butSelectPlayers"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/menuButtonBack"
+        android:onClick="butSelectPlayersClick"
+        android:text="@string/num_of_players"
+        android:textColor="@color/menuButtonText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/butSelectGM" />
+
+    <ImageView
+        android:id="@+id/imgBanner"
+        android:layout_width="337dp"
+        android:layout_height="127dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.585"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/memo_lang_banner" />
+
+    <Button
+        android:id="@+id/butSelectDeck"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/menuButtonBack"
+        android:onClick="butSelectDeckClick"
+        android:text="@string/select_deck"
+        android:textColor="@color/menuButtonText"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgDeck"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgDeck" />
+
+    <ImageView
+        android:id="@+id/imgDeck"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgBanner"
+        app:srcCompat="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/txtGM"
+        android:layout_width="129dp"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/butSelectGM"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toEndOf="@+id/butSelectGM"
+        app:layout_constraintTop_toTopOf="@+id/butSelectGM" />
+
+    <Button
+        android:id="@+id/butPlay"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/menuButtonPlay"
+        android:onClick="butPlayClick"
+        android:text="@string/play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/butSelectPlayers" />
+</androidx.constraintlayout.widget.ConstraintLayout>

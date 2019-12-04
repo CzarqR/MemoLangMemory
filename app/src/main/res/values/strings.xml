@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name" translatable="false">MemoLang</string>
+    <string name="Example">English</string>
+    <string name="select_deck">Select Deck</string>
+    <string name="logo" translatable="false">Logo</string>
+    <string name="select">Select</string>
+    <string name="casual">Casual</string>
+    <string name="learnMode">Learning Mode</string>
+    <string name="select_GM">Select Game Mode</string>
+    <string name="gameMode">Game Mode</string>
+    <string name="num_of_players">Number of Players</string>
+    <string name="select_players">Select number of players</string>
+    <string name="play">Play</string>
+
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Example">Polish</string>
+    <string name="select_deck">Wybierz talię</string>
+    <string name="select">Wybierz</string>
+    <string name="casual">Zwykły</string>
+    <string name="learnMode">Tryb nauki</string>
+    <string name="select_GM">Wybierz Tryb Gry</string>
+    <string name="gameMode">Tryb Gry</string>
+    <string name="num_of_players">Liczba zawodników</string>
+    <string name="select_players">Wybierz liczbę zawodników</string>
+    <string name="play">Graj</string>
+</resources>
