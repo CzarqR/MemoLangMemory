@@ -11,27 +11,33 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener
 {
+    ///  CONST
+    final static int MAX_PLAYERS = 5;
     /// VIEWS
     ImageView imgDeck;
     TextView txtGM;
     TextView txtPlayer;
-
-
+    TextView txtPairs;
     /// VARIABLES
-    String[] decks; //all decks from folder
+    String[] decks; //all decks from folder by name without num of max pairs
+    String[] decks_path; //all decks from folder full path
     int[] actSelectedDeck = {0}; //index of actual selected deck
     String[] gameModes;
-    int[] actSelectedGM = {0}; //index of actual selected gameMode
-    String[] players = {"1", "2", "3", "4", "5", "6"};
-    int[] actSelectedPlayer = {0}; //index of actual selected gameMode
-
+    int[] actSelectedGM = {0}; //index of actual selected gameMode;
+    int actSelectedPlayer = 1; //actual number of players
+    int actSelectedPairs; //actual number of players
+    int maxPairs[];
+    byte trackNumberPick = 0; // 0 - players, 1 - pairs, 2 - time
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,14 +48,16 @@ public class MainActivity extends AppCompatActivity
         imgDeck = findViewById(R.id.imgDeck);
         txtGM = findViewById(R.id.txtGM);
         txtPlayer = findViewById(R.id.txtPlayers);
+        txtPairs = findViewById(R.id.txtPairs);
 
         Functions.hideNavigationBar(this);
-        decks = getDeckList();
+        getDeckList();
         gameModes = new String[]{getString(R.string.casual), getString(R.string.learnMode)};
 
-        setImageFromAssets(imgDeck, "Decks/" + decks[0] + "/" + decks[0] + ".png");
+        setImageFromAssets(imgDeck, "Decks/" + decks_path[0] + "/" + decks[0] + ".png");
         txtGM.setText(gameModes[0]);
-        txtPlayer.setText(players[0]);
+        txtPlayer.setText(Integer.toString(actSelectedPlayer));
+        txtPairs.setText(Integer.toString(maxPairs[actSelectedDeck[0]]));
     }
 
     @Override
@@ -85,15 +93,28 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private String[] getDeckList()
+    private void getDeckList() //load decks from folder and set
     {
+        Pattern pattern = Pattern.compile("([a-zA-Z]+)_(\\d+)");
+        Matcher matcher;
         try
         {
-            return getAssets().list("Decks");
+            decks = getAssets().list("Decks");
+            decks_path = getAssets().list("Decks");
+            maxPairs = new int[decks.length];
         }
         catch (IOException e)
         {
-            return new String[0];
+            maxPairs = new int[0];
+            decks = new String[0];
+            decks_path = new String[0];
+        }
+        for (int i = 0; i < decks.length; i++)
+        {
+            matcher = pattern.matcher(decks[i]);
+            matcher.matches();
+            decks[i] = matcher.group(1);
+            maxPairs[i] = Integer.parseInt(matcher.group(2));
         }
     }
 
@@ -156,22 +177,27 @@ public class MainActivity extends AppCompatActivity
 
     public void butSelectPlayersClick(View view)
     {
-        showSelectDialog(players, actSelectedPlayer, getString(R.string.select_players));
+        trackNumberPick = 0;
+        showNumberPicker(1, MAX_PLAYERS, getString(R.string.num_of_players));
+    }
+
+    public void butSelectPairsClick(View view)
+    {
+        trackNumberPick = 1;
+        showNumberPicker(1, maxPairs[actSelectedDeck[0]], getString(R.string.num_pairs));
     }
 
     private void itemSelected(String[] list, int[] index)
     {
         if (list == decks)
         {
-            setImageFromAssets(imgDeck, "Decks/" + list[index[0]] + "/" + list[index[0]] + ".png");
+            setImageFromAssets(imgDeck, "Decks/" + decks_path[index[0]] + "/" + list[index[0]] + ".png");
+            actSelectedPairs = maxPairs[index[0]];
+            txtPairs.setText(Integer.toString(actSelectedPairs));
         }
         else if (list == gameModes)
         {
             txtGM.setText(list[index[0]]);
-        }
-        else if (list == players)
-        {
-            txtPlayer.setText(list[index[0]]);
         }
     }
 
@@ -179,10 +205,37 @@ public class MainActivity extends AppCompatActivity
     {
         Intent intent = new Intent(getApplicationContext(), game_board.class);
         intent.putExtra("Deck", decks[actSelectedDeck[0]]);
-        intent.putExtra("Players", players[actSelectedPlayer[0]]);
+        intent.putExtra("Players", actSelectedPlayer);
         intent.putExtra("GM", gameModes[actSelectedGM[0]]);
+        intent.putExtra("Cards", actSelectedPairs * 2);
         startActivity(intent);
     }
 
+    @Override
+    public void onValueChange(NumberPicker numberPicker, int i, int i1)
+    {
+        if (trackNumberPick == 0)
+        {
+            actSelectedPlayer = i;
+            txtPlayer.setText(Integer.toString(i));
+        }
+        else if (trackNumberPick == 1)
+        {
+            actSelectedPairs = i;
+            txtPairs.setText(Integer.toString(i));
+        }
+        else if (trackNumberPick == 2)
+        {
+            //todo zmiana timera na runde
+            System.out.println(1);
+        }
+        hideNavigationBar();
+    }
 
+    public void showNumberPicker(int min, int max, String title)
+    {
+        NumberPickerDialog newFragment = new NumberPickerDialog(min, max, title);
+        newFragment.setValueChangeListener(this);
+        newFragment.show(getSupportFragmentManager(), "Number picker");
+    }
 }

@@ -8,6 +8,7 @@
     android:background="#8F2E2E"
     tools:context=".MainActivity" >
 
+
     <TextView
         android:id="@+id/txtPlayers"
         android:layout_width="129dp"
@@ -19,6 +20,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/butSelectPlayers"
         app:layout_constraintTop_toTopOf="@+id/butSelectPlayers" />
+
+    <TextView
+        android:id="@+id/txtPairs"
+        android:layout_width="129dp"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/butSelectPairs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/butSelectPairs"
+        app:layout_constraintTop_toTopOf="@+id/butSelectPairs" />
 
     <Button
         android:id="@+id/butSelectGM"
@@ -47,6 +60,20 @@
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/butSelectGM" />
+
+    <Button
+        android:id="@+id/butSelectPairs"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/menuButtonBack"
+        android:onClick="butSelectPairsClick"
+        android:text="Number of pairs"
+        android:textColor="@color/menuButtonText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/butSelectPlayers" />
 
     <ImageView
         android:id="@+id/imgBanner"
@@ -104,12 +131,15 @@
         android:layout_width="0dp"
         android:layout_height="65dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/menuButtonPlay"
         android:onClick="butPlayClick"
         android:text="@string/play"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/butSelectPlayers" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

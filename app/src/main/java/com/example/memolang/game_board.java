@@ -1,25 +1,37 @@
 package com.example.memolang;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+import androidx.gridlayout.widget.GridLayout;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.widget.Button;
+import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextClock;
 import android.widget.TextView;
+
+import java.util.regex.MatchResult;
 
 public class game_board extends AppCompatActivity
 {
-    final static int MAX_PLAYERS = 6;
-    LinearLayout linLayPlay;
-    LinearLayout linLayStats;
-    ImageView playersImg[];
+    /// CONST
+    final static int DP_MARGIN = 3;
+    final static int DP_VIEW_MARGIN = 8;
+    final static int DP_PLAYERS = 45;
+    final static int DP_TIMER = 25;
+
+
+    int players;
+    String deck;
+    String gm;
+    int cards;
+
+    ///Vievs
     TextView playersStats[];
+    GridLayout gridBoard;
+    ImageView[][] card;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,54 +39,78 @@ public class game_board extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_board);
+
         Intent intent = getIntent();
         Functions.hideNavigationBar(this);
-        System.out.println(intent.getStringExtra("Players"));
-        System.out.println(intent.getStringExtra("Deck"));
-        System.out.println(intent.getStringExtra("GM"));
 
+        players = intent.getIntExtra("Players", 1);
+        deck = intent.getStringExtra("Deck");
+        gm = intent.getStringExtra("GM");
+        cards = intent.getIntExtra("Cards", 2);
 
-        TextView txt1 = new TextView(this);
+        System.out.println(card);
+        System.out.println(players);
+        gridBoard = findViewById(R.id.gridBoard);
+        setBoard();
+    }
 
+    private void setBoard()
+    {
+        int w = getFreeWidth();
+        int h = getFreeHeight();
 
+        int hc = Distribution.cardsH(w, h, cards);
+        System.out.println(hc);
+        int wc = (int) Math.ceil((double) cards / hc);
+        gridBoard.setColumnCount(wc);
+        gridBoard.setRowCount(hc);
 
+        final int CARD_SIZE_PIXEL = convertDpToPixel((double) w / wc >= (double) h / hc ? h / hc : w / wc, this);
+        final int MARGIN_SIZE_PIXELS = convertDpToPixel(DP_MARGIN, this);
 
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CARD_SIZE_PIXEL - 2 * MARGIN_SIZE_PIXELS, CARD_SIZE_PIXEL - 2 * MARGIN_SIZE_PIXELS);
+        layoutParams.setMargins(MARGIN_SIZE_PIXELS, MARGIN_SIZE_PIXELS, MARGIN_SIZE_PIXELS, MARGIN_SIZE_PIXELS);
 
-//        linLayPlay = findViewById(R.id.linLayPlay);
-//        //linLayStats = findViewById(R.id.linLayStats);
-//
-//
-//        //added LayoutParams
-//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-//        //linLayPlay.setOrientation(LinearLayout.VERTICAL);
-//
-//        //add textView
-//        TextView textView = new TextView(this);
-//        textView.setText("The developer world is yours");
-//        textView.setLayoutParams(params);
-//
-//        // added Button
-//        TextView button = new TextView(this);
-//        button.setText("Whedeveloperworldisyours");
-//
-//        //added the textView and the Button to LinearLayout
-//        linLayPlay.addView(textView);
-//        linLayPlay.addView(button);
+        for (int i = 0; i < cards; i++)
+        {
+            ImageView imageView = new ImageView(this);
+            imageView.setImageResource(R.drawable.back_au);
+            imageView.setLayoutParams(layoutParams);
+            imageView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    // TODO card click
+                    System.out.println("CLICK Image");
+                }
+            });
+            gridBoard.addView(imageView);
+        }
+    }
 
+    private int getFreeHeight()
+    {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return convertPixelsToDp(displayMetrics.heightPixels, this) - (DP_VIEW_MARGIN * 4 - DP_MARGIN * 2 + DP_PLAYERS + DP_TIMER);
+    }
 
-//        //linLayPlay.addView(makeImageView());
-//        ImageView imageView1 = makeImageView(100,50,200);
-//        ImageView imageView2 = makeImageView(20,110,160);
-//
-//        //imageView.setColorFilter(Color.GREEN);
-//
-//        linLayPlay.addView(imageView1);
-//        linLayPlay.addView(imageView2);
-//
-//        imageView2.requestLayout();
-//        imageView1.requestLayout();
-//
-//        linLayPlay.requestLayout();
+    private int getFreeWidth()
+    {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return convertPixelsToDp(displayMetrics.widthPixels, this) - (DP_VIEW_MARGIN * 2 - DP_MARGIN * 2);
+    }
+
+    public static int convertPixelsToDp(float px, Context context)
+    {
+        return (int) (px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    public static int convertDpToPixel(float dp, Context context)
+    {
+        return (int) (dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     @Override
@@ -82,24 +118,5 @@ public class game_board extends AppCompatActivity
     {
         super.onResume();
         Functions.hideNavigationBar(this);
-    }
-
-    private ImageView makeImageView(int r, int g, int b)
-    {
-        ImageView img = new ImageView(this);
-        img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT));
-
-        img.setImageResource(R.drawable.def);
-        img.setColorFilter(Color.rgb(r, g, b));
-//        img.
-        img.setScaleType(ImageView.ScaleType.FIT_XY);
-
-        return img;
-    }
-
-    private void fillImg()
-    {
-        playersImg = new ImageView[MAX_PLAYERS];
     }
 }

@@ -2,129 +2,141 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/conLayMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FF9100"
     tools:context=".game_board">
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/linLayPlay"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="45dp"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        android:orientation="horizontal"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:layout_weight="1"-->
-<!--            app:srcCompat="@android:color/holo_red_dark" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView2"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:layout_weight="1"-->
-<!--            app:srcCompat="@android:color/holo_blue_dark" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView3"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1"-->
-<!--            app:srcCompat="@android:color/holo_green_light" />-->
-
-<!--        <ImageView-->
-
-<!--            android:id="@+id/imageView4"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:layout_weight="1"-->
-<!--            app:srcCompat="@android:color/holo_orange_light" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView5"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="0"-->
-<!--            app:srcCompat="@android:color/holo_purple" />-->
-
-
-<!--    </LinearLayout>-->
-
-<!--    <LinearLayout-->
-<!--        android:id="@+id/linLayStats"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="30dp"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        android:orientation="horizontal"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/linLayPlay">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textView1"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1"-->
-<!--            android:gravity="center|center_horizontal|top"-->
-<!--            android:text="TextView" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textView2"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1"-->
-<!--            android:gravity="center|center_horizontal|top"-->
-<!--            android:text="TextView" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textView3"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1"-->
-<!--            android:gravity="center|center_horizontal|top"-->
-<!--            android:text="TextView" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textView4"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1"-->
-<!--            android:gravity="center|center_horizontal|top"-->
-
-<!--            android:text="TextView" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textView5"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="0"-->
-<!--            android:gravity="center|center_horizontal|top"-->
-<!--            android:text="TextView" />-->
-
-<!--    </LinearLayout>-->
-
 
     <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gridLayout"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        app:columnCount="6"
+        app:columnCount="5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:rowCount="3">
+        app:rowCount="1">
+
+        <TextView
+            android:id="@+id/txtPlayer1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FF1744"
+            android:gravity="center_horizontal"
+            android:text="Player 1\n0"
+            android:textSize="18sp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            app:layout_rowWeight="1" />
+
+
+        <TextView
+            android:id="@+id/txtPlayer2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00B0FF"
+            android:gravity="center_horizontal"
+            android:text="Player 2\n0"
+            android:textSize="18sp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            app:layout_rowWeight="1" />
+
+        <TextView
+            android:id="@+id/txtPlayer3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#76FF03"
+            android:gravity="center_horizontal"
+            android:text="Player 3\n0"
+            android:textSize="18sp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            app:layout_rowWeight="1" />
+
+        <TextView
+            android:id="@+id/txtPlayer4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFEA00"
+            android:gravity="center_horizontal"
+            android:text="Player 4\n0"
+            android:textSize="18sp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            app:layout_rowWeight="1" />
+
+        <TextView
+            android:id="@+id/txtPlayer5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#651FFF"
+            android:gravity="center_horizontal"
+            android:text="Player 5\n0"
+            android:textSize="18sp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            app:layout_rowWeight="1" />
 
     </androidx.gridlayout.widget.GridLayout>
+
+    <TextView
+        android:id="@+id/txtTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:background="#D32F2F"
+        android:gravity="center"
+        android:text="12:13"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+
+    <TextView
+        android:id="@+id/txtLang1"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Apple"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/gridBoard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+
+    <TextView
+        android:id="@+id/txtLang2"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Jabłko"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/gridBoard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gridBoard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="5dp"
+        app:columnCount="6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTimer"
+        app:rowCount="10" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
