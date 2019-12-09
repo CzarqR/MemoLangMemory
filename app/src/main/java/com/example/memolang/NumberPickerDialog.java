@@ -11,14 +11,15 @@ import androidx.fragment.app.DialogFragment;
 public class NumberPickerDialog extends DialogFragment
 {
     private NumberPicker.OnValueChangeListener valueChangeListener;
-    int min, max;
+    int min, max, current;
     String title;
 
-    public NumberPickerDialog(int min, int max, String title)
+    public NumberPickerDialog(int min, int max, String title, int current)
     {
         this.min = min;
         this.max = max;
         this.title = title;
+        this.current = current;
     }
 
     @Override
@@ -29,7 +30,7 @@ public class NumberPickerDialog extends DialogFragment
 
         numberPicker.setMinValue(min);
         numberPicker.setMaxValue(max);
-
+        numberPicker.setValue(current);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title);
 
@@ -52,7 +53,15 @@ public class NumberPickerDialog extends DialogFragment
 //                        numberPicker.getValue(), numberPicker.getValue());
 //            }
 //        });
-
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener()
+        {
+            @Override
+            public void onCancel(DialogInterface dialog)
+            {
+                /// TODO hide navigation bar
+                System.out.println("HIDE NAVIGATION BAR");
+            }
+        });
         builder.setView(numberPicker);
         return builder.create();
     }

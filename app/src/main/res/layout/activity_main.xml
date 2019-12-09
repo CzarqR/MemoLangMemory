@@ -33,6 +33,20 @@
         app:layout_constraintStart_toEndOf="@+id/butSelectPairs"
         app:layout_constraintTop_toTopOf="@+id/butSelectPairs" />
 
+    <TextView
+        android:id="@+id/txtTimer"
+        android:layout_width="129dp"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:onClick="txtTimerClick"
+        android:text="Off"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/switchTimer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toEndOf="@+id/switchTimer"
+        app:layout_constraintTop_toTopOf="@+id/switchTimer" />
+
     <Button
         android:id="@+id/butSelectGM"
         android:layout_width="wrap_content"
@@ -140,6 +154,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Switch
+        android:id="@+id/switchTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/menuButtonBack"
+        android:onClick="switchTimerClick"
+        android:scrollbarSize="10dp"
+        android:text="Timer"
+        android:textColor="@color/menuButtonText"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/butSelectPairs" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

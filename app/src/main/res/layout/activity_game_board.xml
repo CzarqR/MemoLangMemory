@@ -5,13 +5,13 @@
     android:id="@+id/conLayMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF9100"
+    android:background="#FFFFFF"
     tools:context=".game_board">
 
 
     <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/gridLayout"
-        android:layout_width="0dp"
+        android:id="@+id/gridPlayers"
+        android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -22,66 +22,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:rowCount="1">
 
-        <TextView
-            android:id="@+id/txtPlayer1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#FF1744"
-            android:gravity="center_horizontal"
-            android:text="Player 1\n0"
-            android:textSize="18sp"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill"
-            app:layout_rowWeight="1" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/txtPlayer1"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="#FF1744"-->
+        <!--            android:gravity="center_horizontal"-->
+        <!--            android:text="Player 1\n0"-->
+        <!--            android:textSize="18sp"-->
+        <!--            app:layout_columnWeight="1"-->
+        <!--            app:layout_gravity="fill"-->
+        <!--            app:layout_rowWeight="1" />-->
 
-
-        <TextView
-            android:id="@+id/txtPlayer2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#00B0FF"
-            android:gravity="center_horizontal"
-            android:text="Player 2\n0"
-            android:textSize="18sp"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill"
-            app:layout_rowWeight="1" />
-
-        <TextView
-            android:id="@+id/txtPlayer3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#76FF03"
-            android:gravity="center_horizontal"
-            android:text="Player 3\n0"
-            android:textSize="18sp"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill"
-            app:layout_rowWeight="1" />
-
-        <TextView
-            android:id="@+id/txtPlayer4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#FFEA00"
-            android:gravity="center_horizontal"
-            android:text="Player 4\n0"
-            android:textSize="18sp"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill"
-            app:layout_rowWeight="1" />
-
-        <TextView
-            android:id="@+id/txtPlayer5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#651FFF"
-            android:gravity="center_horizontal"
-            android:text="Player 5\n0"
-            android:textSize="18sp"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill"
-            app:layout_rowWeight="1" />
 
     </androidx.gridlayout.widget.GridLayout>
 
@@ -96,7 +48,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/gridPlayers" />
 
     <TextView
         android:id="@+id/txtLang1"
@@ -108,7 +60,7 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/gridBoard"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/gridPlayers" />
 
     <TextView
         android:id="@+id/txtLang2"
@@ -120,7 +72,7 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/gridBoard"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/gridPlayers" />
 
 
     <androidx.gridlayout.widget.GridLayout

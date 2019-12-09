@@ -11,4 +11,5 @@
     <string name="select_players">Wybierz liczbę zawodników</string>
     <string name="play">Graj</string>
     <string name="num_pairs">Liczba par</string>
+    <string name="select_time">Czas na rundę</string>
 </resources>

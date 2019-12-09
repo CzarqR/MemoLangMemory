@@ -5,33 +5,39 @@ import androidx.gridlayout.widget.GridLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.regex.MatchResult;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class game_board extends AppCompatActivity
 {
     /// CONST
     final static int DP_MARGIN = 3;
+    final static int DP_MARGIN_PLAYERS = 2;
     final static int DP_VIEW_MARGIN = 8;
     final static int DP_PLAYERS = 45;
     final static int DP_TIMER = 25;
-
-
+    /// In game variables
     int players;
     String deck;
     String gm;
     int cards;
-
-    ///Vievs
+    int time;
+    ///Views
     TextView playersStats[];
     GridLayout gridBoard;
+    GridLayout gridPlayers;
     ImageView[][] card;
+    ///Lists
+    ArrayList<Player> finalPlayers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,12 +52,22 @@ public class game_board extends AppCompatActivity
         players = intent.getIntExtra("Players", 1);
         deck = intent.getStringExtra("Deck");
         gm = intent.getStringExtra("GM");
-        cards = intent.getIntExtra("Cards", 2);
+        cards = intent.getIntExtra("Cards", 4);
+        time = intent.getIntExtra("Time", -1);
 
-        System.out.println(card);
+        System.out.println("XDDDDDDDDDDDDD");
+        System.out.println(cards);
         System.out.println(players);
+        System.out.println(gm);
+        System.out.println(deck);
+        System.out.println(time);
+        System.out.println("XDDDDDDDDDDDDD");
+
         gridBoard = findViewById(R.id.gridBoard);
+        gridPlayers = findViewById(R.id.gridPlayers);
+        initPlayersFinalList();
         setBoard();
+        setPlayers();
     }
 
     private void setBoard()
@@ -74,7 +90,7 @@ public class game_board extends AppCompatActivity
         for (int i = 0; i < cards; i++)
         {
             ImageView imageView = new ImageView(this);
-            imageView.setImageResource(R.drawable.back_au);
+            imageView.setImageResource(R.drawable.back_dark);
             imageView.setLayoutParams(layoutParams);
             imageView.setOnClickListener(new View.OnClickListener()
             {
@@ -86,6 +102,29 @@ public class game_board extends AppCompatActivity
                 }
             });
             gridBoard.addView(imageView);
+        }
+    }
+
+    private void setPlayers()
+    {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int w = displayMetrics.widthPixels;
+        System.out.println(w);
+        w /= players;
+        System.out.println(w);
+        gridPlayers.setColumnCount(players);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(w - convertDpToPixel(2 * DP_MARGIN_PLAYERS, this), convertDpToPixel(DP_PLAYERS, this));
+        layoutParams.setMargins(convertDpToPixel(DP_MARGIN_PLAYERS, this), 0, convertDpToPixel(DP_MARGIN_PLAYERS, this), 0);
+        Collections.shuffle(finalPlayers);
+        for (int i = 0; i < players; i++)
+        {
+            TextView textView = new TextView(this);
+            textView.setText(finalPlayers.get(i).name + "\n0");
+            textView.setBackgroundColor(finalPlayers.get(i).color);
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
+            textView.setLayoutParams(layoutParams);
+            gridPlayers.addView(textView);
         }
     }
 
@@ -118,5 +157,28 @@ public class game_board extends AppCompatActivity
     {
         super.onResume();
         Functions.hideNavigationBar(this);
+    }
+
+    private class Player
+    {
+        int color;
+        String name;
+
+        public Player(int color, String name)
+        {
+            this.color = color;
+            this.name = name;
+        }
+    }
+
+    private void initPlayersFinalList()
+    {
+        finalPlayers = new ArrayList<Player>();
+        finalPlayers.add(new Player(Color.rgb(191, 25, 25), "Red"));
+        finalPlayers.add(new Player(Color.rgb(0, 196, 207), "Blue"));
+        finalPlayers.add(new Player(Color.rgb(10, 191, 52), "Green"));
+        finalPlayers.add(new Player(Color.rgb(216, 227, 5), "Yellow"));
+        finalPlayers.add(new Player(Color.rgb(255, 105, 180), "Pink"));
+        finalPlayers.add(new Player(Color.rgb(255, 165, 0), "Orange"));
     }
 }
