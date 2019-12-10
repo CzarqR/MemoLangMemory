@@ -120,8 +120,10 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     public void butPlayClick(View view)
     {
         Intent intent = new Intent(getApplicationContext(), game_board.class);
-        intent.putExtra("Deck", decks[actSelectedDeck[0]]);
+        intent.putExtra("Deck", decks_path[actSelectedDeck[0]]);
         intent.putExtra("Players", actSelectedPlayer);
+        intent.putExtra("Lang1", "English");
+        intent.putExtra("Lang2", "Polski");
         intent.putExtra("GM", gameModes[actSelectedGM[0]]);
         intent.putExtra("Cards", actSelectedPairs * 2);
         intent.putExtra("Time", switchTimer.isChecked() ? actSelectedTime : -1);
@@ -275,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         if (list == decks)
         {
             setImageFromAssets(imgDeck, "Decks/" + decks_path[index[0]] + "/" + list[index[0]] + ".png");
+            //setImageFromAssets(imgDeck, "/Decks/Letters_10/2_1.png");
             actSelectedPairs = maxPairs[index[0]];
             txtPairs.setText(Integer.toString(actSelectedPairs));
         }
