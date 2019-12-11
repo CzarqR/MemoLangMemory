@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     byte trackNumberPick = 0; // 0 - players, 1 - pairs, 2 - time
     int actSelectedTime = -1;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
