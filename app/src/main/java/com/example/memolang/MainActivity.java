@@ -31,19 +31,26 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     TextView txtPlayer;
     TextView txtPairs;
     TextView txtTimer;
+    TextView txtLang1;
+    TextView txtLang2;
     Switch switchTimer;
     /// VARIABLES
     String[] decks; //all decks from folder by name without num of max pairs
     String[] decks_path; //all decks from folder full path
     int[] actSelectedDeck = {0}; //index of actual selected deck
+    int[] actSelectedLang1 = {0}; //index of actual selected deck
+    int[] actSelectedLang2 = {0}; //index of actual selected deck
     String[] gameModes;
-    int[] actSelectedGM = {0}; //index of actual selected gameMode;
+    int[] actSelectedGM = {0}; //index of actual selected gameMode // 0-casual, 1-learnMode
+    String[] langs;
+    String[] langCode;
+    String[] countryCode;
     int actSelectedPlayer = 1; //actual number of players
     int actSelectedPairs; //actual number of players
     int maxPairs[];
     byte trackNumberPick = 0; // 0 - players, 1 - pairs, 2 - time
     int actSelectedTime = -1;
-
+    boolean trackLang1; //True - lang1 chosen, false - lang 2
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,11 +65,13 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         txtPairs = findViewById(R.id.txtPairs);
         txtTimer = findViewById(R.id.txtTimer);
         switchTimer = findViewById(R.id.switchTimer);
+        txtLang1 = findViewById(R.id.txtLang1);
+        txtLang2 = findViewById(R.id.txtLang2);
 
         /// Start functions
         Functions.hideNavigationBar(this);
         getDeckList();
-        gameModes = new String[]{getString(R.string.casual), getString(R.string.learnMode)};
+        gameModes = listOfGMs();
 
         /// Setting base startup
         setImageFromAssets(imgDeck, "Decks/" + decks_path[0] + "/" + decks[0] + ".png");
@@ -70,6 +79,21 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         txtPlayer.setText(Integer.toString(actSelectedPlayer));
         actSelectedPairs = maxPairs[0];
         txtPairs.setText(Integer.toString(actSelectedPairs));
+
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
+
+        getLangList();
+
+        for (int i = 0; i < langs.length; i++)
+        {
+            System.out.println(langs[i]);
+            System.out.println(langCode[i]);
+            System.out.println(countryCode[i]);
+        }
+
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
     }
 
     /// BACKGROUND ANDROID FUNCTIONS
@@ -106,6 +130,18 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         showSelectDialog(gameModes, actSelectedGM, getString(R.string.select_GM));
     }
 
+    public void txtLang1Click(View view)
+    {
+        trackLang1 = true;
+        showSelectDialog(langs, actSelectedLang1, getString(R.string.select_lang1));
+    }
+
+    public void txtLang2Click(View view)
+    {
+        trackLang1 = false;
+        showSelectDialog(langs, actSelectedLang2, getString(R.string.select_lang2));
+    }
+
     public void butSelectPlayersClick(View view)
     {
         trackNumberPick = 0;
@@ -113,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     }
 
     public void butSelectPairsClick(View view)
+
     {
         trackNumberPick = 1;
         showNumberPicker(2, maxPairs[actSelectedDeck[0]], getString(R.string.num_pairs), actSelectedPairs);
@@ -123,17 +160,25 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         Intent intent = new Intent(getApplicationContext(), game_board.class);
         intent.putExtra("Deck", decks_path[actSelectedDeck[0]]);
         intent.putExtra("Players", actSelectedPlayer);
-        intent.putExtra("Lang1", "English");
-        intent.putExtra("Lang2", "Polski");
-        intent.putExtra("GM", gameModes[actSelectedGM[0]]);
+        if (actSelectedGM[0] == 1)//GM learning mode
+        {
+            intent.putExtra("Lang1", langs[actSelectedLang1[0]]);
+            intent.putExtra("Lang2", langs[actSelectedLang2[0]]);
+            intent.putExtra("LangCode1", langCode[actSelectedLang1[0]]);
+            intent.putExtra("LangCode2", langCode[actSelectedLang2[0]]);
+            intent.putExtra("CountryCode2", countryCode[actSelectedLang2[0]]);
+            intent.putExtra("CountryCode1", countryCode[actSelectedLang1[0]]);
+        }
+
+        intent.putExtra("GM", actSelectedGM[0]);
         intent.putExtra("Cards", actSelectedPairs * 2);
         intent.putExtra("Time", switchTimer.isChecked() ? actSelectedTime : -1);
+
         startActivity(intent);
     }
 
     public void switchTimerClick(View view)
     {
-        ///TODO switch timer
         if (switchTimer.isChecked())
         {
             if (actSelectedTime == -1)
@@ -230,6 +275,30 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         }
     }
 
+    private void getLangList()
+    {
+        Pattern pattern = Pattern.compile("([a-zA-Z]+)_([a-zA-Z]+)_([a-zA-Z]+)\\.([a-zA-Z]+)");
+        Matcher matcher;
+        try
+        {
+            langs = getAssets().list("Decks/" + decks_path[actSelectedDeck[0]] + "/Lang/");
+            langCode = new String[langs.length];
+            countryCode = new String[langs.length];
+        }
+        catch (IOException e)
+        {
+            langs = new String[0];
+        }
+        for (int i = 0; i < langs.length; i++)
+        {
+            matcher = pattern.matcher(langs[i]);
+            matcher.matches();
+            langs[i] = matcher.group(1);
+            langCode[i] = matcher.group(2);
+            countryCode[i] = matcher.group(3);
+        }
+    }
+
     private void showSelectDialog(final String[] list, final int[] actualSelectedItem, String title)
     {
         // setup the alert builder
@@ -253,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
             @Override
             public void onClick(DialogInterface dialog, int index)
             {
-                System.out.println(actSelectedDeck[0]);
                 hideNavigationBar();
                 itemSelected(list, actualSelectedItem);
                 // user clicked OK
@@ -285,6 +353,55 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         else if (list == gameModes)
         {
             txtGM.setText(list[index[0]]);
+            getLangList();
+
+            if (actSelectedGM[0] == 0)//Casual
+            {
+                txtLang1.setVisibility(View.INVISIBLE);
+                txtLang2.setVisibility(View.INVISIBLE);
+            }
+            else if (actSelectedGM[0] == 1)//Learning mode
+            {
+                txtLang1.setVisibility(View.VISIBLE);
+                txtLang2.setVisibility(View.VISIBLE);
+                txtLang1.setText(langs[actSelectedLang1[0]]);
+                txtLang2.setText(langs[actSelectedLang2[0]]);
+            }
         }
+        else if (list == langs)
+        {
+            if (trackLang1) // first language picked
+            {
+                txtLang1.setText(langs[actSelectedLang1[0]]);
+            }
+            else // second language picked
+            {
+                txtLang2.setText(langs[actSelectedLang2[0]]);
+            }
+        }
+    }
+
+    public enum GM
+    {
+        Casual(R.string.casual),
+        Leaning_Mode(R.string.learnMode);
+        private int mResId = -1;
+
+        GM(int resId)
+        {
+            mResId = resId;
+        }
+    }
+
+    private String[] listOfGMs()
+    {
+        String[] str = new String[GM.values().length];
+        int i = 0;
+        for (GM gm : GM.values())
+        {
+            str[i] = getString(gm.mResId);
+            i++;
+        }
+        return str;
     }
 }

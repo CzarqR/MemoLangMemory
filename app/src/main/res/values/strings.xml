@@ -13,5 +13,7 @@
     <string name="play">Play</string>
     <string name="num_pairs">Number of Pairs</string>
     <string name="select_time">Time per round</string>
+    <string name="select_lang1">Choose first language</string>
+    <string name="select_lang2">Choose second language</string>
 
 </resources>

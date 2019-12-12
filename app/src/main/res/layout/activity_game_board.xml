@@ -43,7 +43,7 @@
         android:layout_height="25dp"
         android:layout_marginTop="8dp"
         android:background="#FFFFFF"
-        android:gravity="center|left|center_vertical"
+        android:gravity="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

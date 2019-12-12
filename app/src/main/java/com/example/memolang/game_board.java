@@ -10,7 +10,9 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.speech.tts.TextToSpeech;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +43,7 @@ public class game_board extends AppCompatActivity
     int players;
     String deck;
     byte gm; // 0 - casual , 1 - learning mode
-    String language1, language2;
+    String language1, language2, countryCode1, countryCode2, langCode1, langCode2;
     int cards;
     int time;
     ///Views
@@ -61,6 +64,9 @@ public class game_board extends AppCompatActivity
     boolean firstPickStatus = true;
     int[] firstPick = {-1, -1};
     int[] secondPick = {-1, -1};
+    Locale locale1;
+    Locale locale2;
+    private TextToSpeech reader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,29 +80,24 @@ public class game_board extends AppCompatActivity
 
         players = intent.getIntExtra("Players", 1);
         deck = intent.getStringExtra("Deck");
-        String gmS = intent.getStringExtra("GM");
-        if (gmS.equals(getString(R.string.casual)))
+        gm = (byte) intent.getIntExtra("GM", 0);
+
+        if (gm == 1)
         {
-            gm = 0;
+            language1 = intent.getStringExtra("Lang1");
+            language2 = intent.getStringExtra("Lang2");
+            countryCode1 = intent.getStringExtra("CountryCode1");
+            countryCode2 = intent.getStringExtra("CountryCode2");
+            langCode1 = intent.getStringExtra("LangCode1");
+            langCode2 = intent.getStringExtra("LangCode2");
         }
-        else if (gmS.equals(getString(R.string.learnMode)))
-        {
-            gm = 1;
-        }
-        language1 = intent.getStringExtra("Lang1");
-        language2 = intent.getStringExtra("Lang2");
+
+
         cards = intent.getIntExtra("Cards", 4);
         time = intent.getIntExtra("Time", -1) * 1000;
         txtTimer = findViewById(R.id.txtTimer);
         txtLang1 = findViewById(R.id.txtLang1);
         txtLang2 = findViewById(R.id.txtLang2);
-//        System.out.println("XDDDDDDDDDDDDD");
-//        System.out.println(cards);
-//        System.out.println(players);
-//        System.out.println(gm);
-//        System.out.println(deck);
-//        System.out.println(time);
-//        System.out.println("XDDDDDDDDDDDDD");
 
         gridBoard = findViewById(R.id.gridBoard);
         gridPlayers = findViewById(R.id.gridPlayers);
@@ -116,6 +117,51 @@ public class game_board extends AppCompatActivity
         {
             txtTimer.setText("Turn");
         }
+
+        if (gm == 1) // learning mode
+        {
+            locale1 = new Locale(intent.getStringExtra("LangCode1"), intent.getStringExtra("CountryCode1"));
+            locale2 = new Locale(intent.getStringExtra("LangCode2"), intent.getStringExtra("CountryCode2"));
+            reader = new TextToSpeech(this, new TextToSpeech.OnInitListener()
+            {
+                @Override
+                public void onInit(int status)
+                {
+                    if (status == TextToSpeech.SUCCESS) //CHECK language compatibility
+                    {
+                        int result = reader.setLanguage(locale1);
+
+                        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
+                        {
+                            Log.e("TTS", "Language 1 not supported");
+                        }
+                        result = reader.setLanguage(locale2);
+
+                        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
+                        {
+                            Log.e("TTS", "Language 2 not supported");
+                        }
+                    }
+                    else
+                    {
+                        Log.e("TTS", "Initialization failed");
+                    }
+                }
+            });
+            reader.setPitch(1f);
+            reader.setSpeechRate(1.1f);
+        }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        if (reader != null)//TURN off all voices when shutting down app
+        {
+            reader.stop();
+            reader.shutdown();
+        }
+        super.onDestroy();
     }
 
     private void startTimer()
@@ -246,7 +292,7 @@ public class game_board extends AppCompatActivity
                         }
                         else //clicking card which is already shown
                         {
-                            System.out.println("SHOW!!");
+                            //todo animation click same card
                         }
                     }
                 }
@@ -274,6 +320,9 @@ public class game_board extends AppCompatActivity
 
                                 setImageFromAssets(curImg, "Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
                                 txtLang1.setText(cardBoard[r][c].language1);
+                                reader.stop();
+                                reader.setLanguage(locale1);
+                                reader.speak(cardBoard[r][c].language1, TextToSpeech.QUEUE_ADD, null, null);
                                 if (secondPick[0] != -1)
                                 {
                                     txtLang2.setText("");
@@ -290,22 +339,18 @@ public class game_board extends AppCompatActivity
                                 }
                                 setImageFromAssets(curImg, "Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
                                 txtLang2.setText(cardBoard[r][c].language2);
-
+                                reader.setLanguage(locale2);
+                                reader.speak(cardBoard[r][c].language2, TextToSpeech.QUEUE_ADD, null, null);
                                 firstPickStatus = true;
                                 secondPick[0] = r;
                                 secondPick[1] = c;
                                 if (cardBoard[firstPick[0]][firstPick[1]].matches(cardBoard[r][c]))// pairs matched
                                 {
-                                    System.out.println("YES");
-
-                                    //pRR = true;
                                     cardBoard[r][c].stateMatch = true;
                                     cardBoard[firstPick[0]][firstPick[1]].stateMatch = true;
                                     finalPlayers.get(playerIndex).score++;
                                     finalPlayers.get(playerIndex).setScore();
-
                                     matchedPairs++;
-
                                     if (matchedPairs == cards / 2) // END of the game
                                     {
                                         //todo end of the game
@@ -324,7 +369,6 @@ public class game_board extends AppCompatActivity
                                 }
                                 else //pairs don't match
                                 {
-                                    System.out.println("NO");
                                     nextPlayerPairsDontMatch();
                                     if (time > 0)
                                     {
@@ -337,7 +381,7 @@ public class game_board extends AppCompatActivity
                         }
                         else //clicking card which is already shown
                         {
-                            System.out.println("SHOW!!");
+
                         }
                     }
                 }
@@ -352,7 +396,6 @@ public class game_board extends AppCompatActivity
             imageView.setTag((i / wc) + "_" + (i % wc));
             imageView.setOnClickListener(onClickListener);
             cardBoard[i / wc][i % wc].img = imageView;
-
             gridBoard.addView(imageView);
         }
     }
@@ -503,9 +546,6 @@ public class game_board extends AppCompatActivity
     private void loadImages()
     {
 
-        ArrayList<String> lang1st = readLines("Decks/" + deck + "/Lang/" + language1 + ".txt");
-        ArrayList<String> lang2nd = readLines("Decks/" + deck + "/Lang/" + language2 + ".txt");
-
         Pattern pattern = Pattern.compile("([a-zA-Z]+)_(\\d+)");
         Matcher matcher;
         matcher = pattern.matcher(deck);
@@ -528,21 +568,39 @@ public class game_board extends AppCompatActivity
 
         cardBoard = new Card[(int) Math.ceil(((double) cards) / gridBoard.getColumnCount())][];
 
-        System.out.println();
-
         for (int i = 0; i < cardBoard.length - 1; i++)
         {
             cardBoard[i] = new Card[gridBoard.getColumnCount()];
         }
         cardBoard[cardBoard.length - 1] = new Card[cards % gridBoard.getColumnCount() == 0 ? gridBoard.getColumnCount() : cards % gridBoard.getColumnCount()];
 
-        for (int i = 0; i < cardBoard.length; i++)
+        if (gm == 0) // GM CASUAL
         {
-            for (int j = 0; j < cardBoard[i].length; j++)
+            for (int i = 0; i < cardBoard.length; i++)
             {
-                boolean zeroIndex = listImages.get(i * gridBoard.getColumnCount() + j).substring(listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_") + 1, listImages.get(i * gridBoard.getColumnCount() + j).indexOf(".")).equals("0");
-                short id = Short.parseShort(listImages.get(i * gridBoard.getColumnCount() + j).substring(0, listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_")));
-                cardBoard[i][j] = new Card(zeroIndex, lang1st.get(id), lang2nd.get(id), id);
+                for (int j = 0; j < cardBoard[i].length; j++)
+                {
+                    boolean zeroIndex = listImages.get(i * gridBoard.getColumnCount() + j).substring(listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_") + 1, listImages.get(i * gridBoard.getColumnCount() + j).indexOf(".")).equals("0");
+                    short id = Short.parseShort(listImages.get(i * gridBoard.getColumnCount() + j).substring(0, listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_")));
+
+                    cardBoard[i][j] = new Card(zeroIndex, null, null, id);
+                }
+            }
+        }
+        else if (gm == 1)// GM LEARN MODE
+        {
+            ArrayList<String> lang1st = readLines("Decks/" + deck + "/Lang/" + language1 + "_" + langCode1 + "_" + countryCode1 + ".txt");
+            ArrayList<String> lang2nd = readLines("Decks/" + deck + "/Lang/" + language2 + "_" + langCode2 + "_" + countryCode2 + ".txt");
+
+            for (int i = 0; i < cardBoard.length; i++)
+            {
+                for (int j = 0; j < cardBoard[i].length; j++)
+                {
+                    boolean zeroIndex = listImages.get(i * gridBoard.getColumnCount() + j).substring(listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_") + 1, listImages.get(i * gridBoard.getColumnCount() + j).indexOf(".")).equals("0");
+                    short id = Short.parseShort(listImages.get(i * gridBoard.getColumnCount() + j).substring(0, listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_")));
+
+                    cardBoard[i][j] = new Card(zeroIndex, lang1st.get(id), lang2nd.get(id), id);
+                }
             }
         }
     }

@@ -12,4 +12,6 @@
     <string name="play">Graj</string>
     <string name="num_pairs">Liczba par</string>
     <string name="select_time">Czas na rundę</string>
+    <string name="select_lang1">Wybierz pierwszy język</string>
+    <string name="select_lang2">Wybierz drugi język</string>
 </resources>

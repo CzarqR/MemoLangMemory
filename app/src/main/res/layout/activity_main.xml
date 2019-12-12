@@ -14,6 +14,7 @@
         android:layout_width="129dp"
         android:layout_height="46dp"
         android:gravity="center"
+        android:onClick="butSelectPlayersClick"
         android:text="TextView"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/butSelectPlayers"
@@ -26,6 +27,7 @@
         android:layout_width="129dp"
         android:layout_height="46dp"
         android:gravity="center"
+        android:onClick="butSelectPairsClick"
         android:text="TextView"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/butSelectPairs"
@@ -123,6 +125,7 @@
         android:layout_height="100dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:onClick="butSelectDeckClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgBanner"
         app:srcCompat="@android:color/darker_gray" />
@@ -132,6 +135,7 @@
         android:layout_width="129dp"
         android:layout_height="46dp"
         android:gravity="center"
+        android:onClick="butSelectGMClick"
         android:text="TextView"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/butSelectGM"
@@ -169,6 +173,36 @@
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/butSelectPairs" />
+
+    <TextView
+        android:id="@+id/txtLang1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        android:background="@color/menuButtonBack"
+        android:onClick="txtLang1Click"
+        android:text="txtxLang1"
+        android:textColor="@color/menuButtonText"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchTimer" />
+
+    <TextView
+        android:id="@+id/txtLang2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/menuButtonBack"
+        android:onClick="txtLang2Click"
+        android:text="txtxLang2"
+        android:textColor="@color/menuButtonText"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.474"
+        app:layout_constraintStart_toEndOf="@+id/txtLang1"
+        app:layout_constraintTop_toTopOf="@+id/txtLang1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
