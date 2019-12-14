@@ -33,7 +33,7 @@ public class NumberPickerDialog extends DialogFragment
         numberPicker.setValue(current);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title);
-
+        builder.setCancelable(false);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
         {
             @Override
@@ -53,12 +53,12 @@ public class NumberPickerDialog extends DialogFragment
 //                        numberPicker.getValue(), numberPicker.getValue());
 //            }
 //        });
+
         builder.setOnCancelListener(new DialogInterface.OnCancelListener()
         {
             @Override
             public void onCancel(DialogInterface dialog)
             {
-                /// TODO hide navigation bar
                 System.out.println("HIDE NAVIGATION BAR");
             }
         });

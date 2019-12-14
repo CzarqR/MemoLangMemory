@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         txtLang2 = findViewById(R.id.txtLang2);
 
         /// Start functions
-        Functions.hideNavigationBar(this);
+        hideNavigationBar();
         getDeckList();
         gameModes = listOfGMs();
 
@@ -80,20 +80,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         actSelectedPairs = maxPairs[0];
         txtPairs.setText(Integer.toString(actSelectedPairs));
 
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
-
         getLangList();
-
-        for (int i = 0; i < langs.length; i++)
-        {
-            System.out.println(langs[i]);
-            System.out.println(langCode[i]);
-            System.out.println(countryCode[i]);
-        }
-
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
     }
 
     /// BACKGROUND ANDROID FUNCTIONS
@@ -102,10 +89,9 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     protected void onResume()
     {
         super.onResume();
-        Functions.hideNavigationBar(this);
+        hideNavigationBar();
     }
 
-    ///FUNCTION from other class, try to set one global function for all
     public void hideNavigationBar()
     {
         this.getWindow().getDecorView().
@@ -281,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         Matcher matcher;
         try
         {
-            langs = getAssets().list("Decks/" + decks_path[actSelectedDeck[0]] + "/Lang/");
+            langs = getAssets().list("Decks/" + decks_path[actSelectedDeck[0]] + "/Lang");
             langCode = new String[langs.length];
             countryCode = new String[langs.length];
         }
@@ -345,15 +331,22 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     {
         if (list == decks)
         {
+            getLangList();
+            if (actSelectedGM[0] == 1)//Learning mode
+            {
+                actSelectedLang1[0] = 0;
+                actSelectedLang2[0] = 0;
+                txtLang1.setText(langs[actSelectedLang1[0]]);
+                txtLang2.setText(langs[actSelectedLang2[0]]);
+            }
+
             setImageFromAssets(imgDeck, "Decks/" + decks_path[index[0]] + "/" + list[index[0]] + ".png");
-            //setImageFromAssets(imgDeck, "/Decks/Letters_10/2_1.png");
             actSelectedPairs = maxPairs[index[0]];
             txtPairs.setText(Integer.toString(actSelectedPairs));
         }
         else if (list == gameModes)
         {
             txtGM.setText(list[index[0]]);
-            getLangList();
 
             if (actSelectedGM[0] == 0)//Casual
             {

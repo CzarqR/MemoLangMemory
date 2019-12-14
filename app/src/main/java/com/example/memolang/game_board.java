@@ -3,13 +3,16 @@ package com.example.memolang;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.gridlayout.widget.GridLayout;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -32,6 +35,9 @@ import java.util.regex.Pattern;
 public class game_board extends AppCompatActivity
 {
     /// CONST
+    final static int DURATION_ANIM = 520;
+    final static int DALEY_ANIMATION = 20;
+    final static int INTENSIVITY_SHAKE = 50;
     final static int DP_MARGIN = 3;
     final static int DP_MARGIN_PLAYERS = 2;
     final static int DP_VIEW_MARGIN = 8;
@@ -76,7 +82,7 @@ public class game_board extends AppCompatActivity
         setContentView(R.layout.activity_game_board);
 
         Intent intent = getIntent();
-        Functions.hideNavigationBar(this);
+        hideNavigationBar();
 
         players = intent.getIntExtra("Players", 1);
         deck = intent.getStringExtra("Deck");
@@ -91,7 +97,6 @@ public class game_board extends AppCompatActivity
             langCode1 = intent.getStringExtra("LangCode1");
             langCode2 = intent.getStringExtra("LangCode2");
         }
-
 
         cards = intent.getIntExtra("Cards", 4);
         time = intent.getIntExtra("Time", -1) * 1000;
@@ -148,9 +153,94 @@ public class game_board extends AppCompatActivity
                     }
                 }
             });
-            reader.setPitch(1f);
+            reader.setPitch(1.1f);
             reader.setSpeechRate(1.1f);
         }
+    }
+
+    private void animateShow(final ImageView img, final int r, final int c)
+    {
+        img.setClickable(false);
+        final Handler handler = new Handler();
+        img.animate().rotationX(180).setDuration(2 * DURATION_ANIM);
+        img.animate().scaleX(0.7f).scaleY(0.7f).setDuration(DURATION_ANIM);
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                setImageFromAssets(img, "Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
+                img.animate().scaleX(1f).scaleY(1f).setDuration(DURATION_ANIM);
+            }
+        }, DURATION_ANIM - DALEY_ANIMATION);
+
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                img.setClickable(true);
+            }
+        }, DURATION_ANIM * 2);
+    }
+
+    private void animateHide(final ImageView img)
+    {
+        final Handler handler = new Handler();
+        img.animate().rotationX(0).setDuration(2 * DURATION_ANIM);
+        img.animate().scaleX(0.7f).scaleY(0.7f).setDuration(DURATION_ANIM);
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                img.setImageDrawable(revers);
+                img.animate().scaleX(1f).scaleY(1f).setDuration(DURATION_ANIM);
+            }
+        }, DURATION_ANIM - DALEY_ANIMATION);
+    }
+
+    private void animateShake(final ImageView img)
+    {
+        final Handler handler = new Handler();
+        final int count = 12;
+        for (int i = 0; i < count; i++)
+        {
+            final int finalI = i;
+            handler.postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (finalI % 2 == 0)
+                        img.animate().translationX(15f).setDuration(INTENSIVITY_SHAKE);
+                    else
+                        img.animate().translationX(-15f).setDuration(INTENSIVITY_SHAKE);
+                }
+            }, INTENSIVITY_SHAKE * i);
+        }
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                img.animate().translationX(0).setDuration(INTENSIVITY_SHAKE);
+            }
+        }, INTENSIVITY_SHAKE * count);
+    }
+
+    private void animateVanish(final ImageView img)
+    {
+        final Handler handler = new Handler();
+        img.animate().rotation(720).scaleX(0).scaleY(0).setDuration(DURATION_ANIM);
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                img.setVisibility(View.INVISIBLE);
+            }
+        }, DURATION_ANIM);
     }
 
     @Override
@@ -177,15 +267,17 @@ public class game_board extends AppCompatActivity
             @Override
             public void onFinish()
             {
-                hideMatchedPair();
+                //hideMatchedPair();
                 if (firstPick[0] != -1)
                 {
+                    //animateHide(cardBoard[firstPick[0]][firstPick[1]].img);
                     cardBoard[firstPick[0]][firstPick[1]].img.setImageDrawable(revers);
                     cardBoard[firstPick[0]][firstPick[1]].stateHide = true;
                     txtLang1.setText("");
                 }
                 if (secondPick[0] != -1)
                 {
+                    //animateHide(cardBoard[secondPick[0]][secondPick[1]].img);
                     cardBoard[secondPick[0]][secondPick[1]].img.setImageDrawable(revers);
                     cardBoard[secondPick[0]][secondPick[1]].stateHide = true;
                     txtLang2.setText("");
@@ -212,7 +304,7 @@ public class game_board extends AppCompatActivity
 
     private void setCardLayout()
     {
-        int hc = gridBoard.getRowCount();
+        //int hc = gridBoard.getRowCount();
         int wc = gridBoard.getColumnCount();
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CARD_SIZE_PIXEL - 2 * MARGIN_SIZE_PIXELS, CARD_SIZE_PIXEL - 2 * MARGIN_SIZE_PIXELS);
         layoutParams.setMargins(MARGIN_SIZE_PIXELS, MARGIN_SIZE_PIXELS, MARGIN_SIZE_PIXELS, MARGIN_SIZE_PIXELS);
@@ -231,7 +323,7 @@ public class game_board extends AppCompatActivity
 
                     if (!cardBoard[r][c].stateMatch) // clicking card that is unmatched
                     {
-                        ImageView curImg = (ImageView) v;
+                        final ImageView curImg = (ImageView) v;
                         if (cardBoard[r][c].stateHide) // clicking hidden card
                         {
 
@@ -239,7 +331,7 @@ public class game_board extends AppCompatActivity
                             {
                                 hideMatchedPair();
 
-                                setImageFromAssets(curImg, "Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
+                                animateShow(curImg, r, c);
                                 firstPickStatus = false;
                                 firstPick[0] = r;
                                 firstPick[1] = c;
@@ -250,13 +342,23 @@ public class game_board extends AppCompatActivity
                                 {
                                     timer.cancel();
                                 }
-                                setImageFromAssets(curImg, "Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
+                                animateShow(curImg, r, c);
 
                                 firstPickStatus = true;
                                 secondPick[0] = r;
                                 secondPick[1] = c;
                                 if (cardBoard[firstPick[0]][firstPick[1]].matches(cardBoard[r][c]))// pairs matched
                                 {
+                                    final Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable()
+                                    {
+                                        @Override
+                                        public void run()
+                                        {
+                                            animateVanish(curImg);
+                                            animateVanish(cardBoard[firstPick[0]][firstPick[1]].img);
+                                        }
+                                    }, DURATION_ANIM * 3);
                                     cardBoard[r][c].stateMatch = true;
                                     cardBoard[firstPick[0]][firstPick[1]].stateMatch = true;
                                     finalPlayers.get(playerIndex).score++;
@@ -266,9 +368,16 @@ public class game_board extends AppCompatActivity
 
                                     if (matchedPairs == cards / 2) // END of the game
                                     {
-                                        //todo end of the game
-                                        cardBoard[firstPick[0]][firstPick[1]].img.setVisibility(View.INVISIBLE);
-                                        cardBoard[secondPick[0]][secondPick[1]].img.setVisibility(View.INVISIBLE);
+                                        hideMatchedPair();
+                                        final Handler handler1 = new Handler();
+                                        handler1.postDelayed(new Runnable()
+                                        {
+                                            @Override
+                                            public void run()
+                                            {
+                                                endOfGame();
+                                            }
+                                        }, DURATION_ANIM * 4);
                                     }
                                     else  // NOT END of the game
                                     {
@@ -292,7 +401,7 @@ public class game_board extends AppCompatActivity
                         }
                         else //clicking card which is already shown
                         {
-                            //todo animation click same card
+                            animateShake(curImg);
                         }
                     }
                 }
@@ -318,7 +427,7 @@ public class game_board extends AppCompatActivity
                             {
                                 hideMatchedPair();
 
-                                setImageFromAssets(curImg, "Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
+                                animateShow(curImg, r, c);
                                 txtLang1.setText(cardBoard[r][c].language1);
                                 reader.stop();
                                 reader.setLanguage(locale1);
@@ -337,7 +446,8 @@ public class game_board extends AppCompatActivity
                                 {
                                     timer.cancel();
                                 }
-                                setImageFromAssets(curImg, "Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
+                                animateShow(curImg, r, c);
+
                                 txtLang2.setText(cardBoard[r][c].language2);
                                 reader.setLanguage(locale2);
                                 reader.speak(cardBoard[r][c].language2, TextToSpeech.QUEUE_ADD, null, null);
@@ -353,11 +463,16 @@ public class game_board extends AppCompatActivity
                                     matchedPairs++;
                                     if (matchedPairs == cards / 2) // END of the game
                                     {
-                                        //todo end of the game
-                                        cardBoard[firstPick[0]][firstPick[1]].img.setVisibility(View.INVISIBLE);
-                                        cardBoard[secondPick[0]][secondPick[1]].img.setVisibility(View.INVISIBLE);
-                                        txtLang2.setText("");
-                                        txtLang1.setText("");
+                                        hideMatchedPair();
+                                        final Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable()
+                                        {
+                                            @Override
+                                            public void run()
+                                            {
+                                                endOfGame();
+                                            }
+                                        }, DURATION_ANIM);
                                     }
                                     else  // NOT END of the game
                                     {
@@ -381,7 +496,7 @@ public class game_board extends AppCompatActivity
                         }
                         else //clicking card which is already shown
                         {
-
+                            animateShake(curImg);
                         }
                     }
                 }
@@ -400,22 +515,106 @@ public class game_board extends AppCompatActivity
         }
     }
 
+    private String winner()
+    {
+        if (players == 1)
+        {
+            return "The winner is... There was only one player so its only one option: " + finalPlayers.get(0).name;
+        }
+        int max = finalPlayers.get(0).score;
+        ArrayList<Integer> winnersIndexes = new ArrayList<>();
+        winnersIndexes.add(0);
+        for (int i = 1; i < finalPlayers.size(); i++)
+        {
+            if (max < finalPlayers.get(i).score)
+            {
+                winnersIndexes.clear();
+                winnersIndexes.add(i);
+                max = finalPlayers.get(i).score;
+            }
+            else if (max == finalPlayers.get(i).score)
+            {
+                winnersIndexes.add(i);
+            }
+        }
+
+        if (winnersIndexes.size() == 1)//only one winner
+        {
+            return "The winner is... " + finalPlayers.get(winnersIndexes.get(0)).name + "! With score " + max;
+        }
+        else if (winnersIndexes.size() == players && players > 2) //all players with the same score and number of players is more than 2
+        {
+            return "The winner is... Everyone!!! with score " + max;
+        }
+        else //many winners
+        {
+            String x = "The winner is... Draw! ";
+
+            for (int i = 0; i < winnersIndexes.size(); i++)
+            {
+                x += finalPlayers.get(winnersIndexes.get(i)).name + " and ";
+            }
+            x = x.substring(0, x.length() - 4);
+            x += "has the same score: " + max;
+            return x;
+        }
+    }
+
+    private void endOfGame()
+    {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage(winner());
+        builder1.setCancelable(false);
+
+        builder1.setPositiveButton(
+                "Play again",
+                new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        finish();
+                        startActivity(getIntent());
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNeutralButton(
+                "Menu",
+                new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        finish();
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
+    public void hideNavigationBar()
+    {
+        this.getWindow().getDecorView().
+                setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                );
+    }
+
     private void hideMatchedPair()
     {
-        if (secondPick[0] != -1) // in the first round pRR can't be checked
+        if (secondPick[0] != -1) //
         {
-            if (cardBoard[firstPick[0]][firstPick[1]].stateMatch) // previous round card matched
-            {
-                cardBoard[firstPick[0]][firstPick[1]].img.setVisibility(View.INVISIBLE);
-                cardBoard[secondPick[0]][secondPick[1]].img.setVisibility(View.INVISIBLE);
-            }
-            else // previous round card didn't matched
-            {
-                cardBoard[firstPick[0]][firstPick[1]].img.setImageDrawable(revers);
-                cardBoard[secondPick[0]][secondPick[1]].img.setImageDrawable(revers);
-                cardBoard[firstPick[0]][firstPick[1]].stateHide = true;
-                cardBoard[secondPick[0]][secondPick[1]].stateHide = true;
-            }
+            animateHide(cardBoard[firstPick[0]][firstPick[1]].img);
+            animateHide(cardBoard[secondPick[0]][secondPick[1]].img);
+//                cardBoard[firstPick[0]][firstPick[1]].img.setImageDrawable(revers);
+//                cardBoard[secondPick[0]][secondPick[1]].img.setImageDrawable(revers);
+            cardBoard[firstPick[0]][firstPick[1]].stateHide = true;
+            cardBoard[secondPick[0]][secondPick[1]].stateHide = true;
         }
     }
 
@@ -476,7 +675,7 @@ public class game_board extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        Functions.hideNavigationBar(this);
+        hideNavigationBar();
     }
 
     private class Player
