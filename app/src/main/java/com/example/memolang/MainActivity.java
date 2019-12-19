@@ -1,13 +1,17 @@
 package com.example.memolang;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
@@ -33,7 +37,9 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     TextView txtTimer;
     TextView txtLang1;
     TextView txtLang2;
+    TextView txtLangSelect;
     Switch switchTimer;
+    ViewPager viewPager;
     /// VARIABLES
     String[] decks; //all decks from folder by name without num of max pairs
     String[] decks_path; //all decks from folder full path
@@ -59,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         setContentView(R.layout.activity_main);
 
         /// Load Views
-        imgDeck = findViewById(R.id.imgDeck);
         txtGM = findViewById(R.id.txtGM);
         txtPlayer = findViewById(R.id.txtPlayers);
         txtPairs = findViewById(R.id.txtPairs);
@@ -67,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         switchTimer = findViewById(R.id.switchTimer);
         txtLang1 = findViewById(R.id.txtLang1);
         txtLang2 = findViewById(R.id.txtLang2);
-
+        viewPager = findViewById(R.id.pgVdeckPicker);
+        txtLangSelect = findViewById(R.id.txtLangSelect);
         /// Start functions
         hideNavigationBar();
         getDeckList();
@@ -81,6 +87,66 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         txtPairs.setText(Integer.toString(actSelectedPairs));
 
         getLangList();
+        setDeckPicker();
+        loadSharedPrecedences();
+    }
+
+    private void loadSharedPrecedences()
+    {
+        SharedPreferences shPref = this.getSharedPreferences("com.example.memolang", Context.MODE_PRIVATE);
+        if (!shPref.contains("revers"))
+        {
+            shPref.edit().putString("revers", "default.png").apply();
+        }
+        if (!shPref.contains("back"))
+        {
+            shPref.edit().putString("back", "default.png").apply();
+        }
+    }
+
+    private void setDeckPicker()
+    {
+        Drawable[] imgDeckPicker = new Drawable[decks_path.length];
+        AssetManager assetManager = getAssets();
+
+        for (int i = 0; i < imgDeckPicker.length; i++)
+        {
+            InputStream inputStream = null;
+            try
+            {
+                inputStream = assetManager.open(String.valueOf("DecksList/" + decks_path[i] + ".png"));
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                Log.e("Asset Load", "Couldn't load deck image with index " + i);
+                imgDeckPicker[i] = null;
+            }
+            imgDeckPicker[i] = Drawable.createFromStream(inputStream, null);
+        }
+
+        ImageAdapter deckPicker = new ImageAdapter(this, imgDeckPicker);
+        viewPager.setAdapter(deckPicker);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+            }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+                actSelectedDeck[0] = position;
+                changeDeck(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state)
+            {
+            }
+        });
     }
 
     /// BACKGROUND ANDROID FUNCTIONS
@@ -135,10 +201,16 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     }
 
     public void butSelectPairsClick(View view)
-
     {
         trackNumberPick = 1;
         showNumberPicker(2, maxPairs[actSelectedDeck[0]], getString(R.string.num_pairs), actSelectedPairs);
+    }
+
+    public void butSettingsClick(View view)
+    {
+        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+
+        startActivity(intent);
     }
 
     public void butPlayClick(View view)
@@ -232,13 +304,12 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         }
         catch (Exception ex)
         {
-            return;
         }
     }
 
     private void getDeckList() //load decks from folder and set
     {
-        Pattern pattern = Pattern.compile("([a-zA-Z]+)_(\\d+)");
+        Pattern pattern = Pattern.compile("([a-zA-Z]+)_(\\d+)_(\\d)");
         Matcher matcher;
         try
         {
@@ -332,17 +403,9 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         if (list == decks)
         {
             getLangList();
-            if (actSelectedGM[0] == 1)//Learning mode
-            {
-                actSelectedLang1[0] = 0;
-                actSelectedLang2[0] = 0;
-                txtLang1.setText(langs[actSelectedLang1[0]]);
-                txtLang2.setText(langs[actSelectedLang2[0]]);
-            }
+            changeDeck(index[0]);
 
-            setImageFromAssets(imgDeck, "Decks/" + decks_path[index[0]] + "/" + list[index[0]] + ".png");
-            actSelectedPairs = maxPairs[index[0]];
-            txtPairs.setText(Integer.toString(actSelectedPairs));
+            viewPager.setCurrentItem(index[0]);
         }
         else if (list == gameModes)
         {
@@ -352,11 +415,13 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
             {
                 txtLang1.setVisibility(View.INVISIBLE);
                 txtLang2.setVisibility(View.INVISIBLE);
+                txtLangSelect.setVisibility(View.INVISIBLE);
             }
             else if (actSelectedGM[0] == 1)//Learning mode
             {
                 txtLang1.setVisibility(View.VISIBLE);
                 txtLang2.setVisibility(View.VISIBLE);
+                txtLangSelect.setVisibility(View.VISIBLE);
                 txtLang1.setText(langs[actSelectedLang1[0]]);
                 txtLang2.setText(langs[actSelectedLang2[0]]);
             }
@@ -372,6 +437,21 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                 txtLang2.setText(langs[actSelectedLang2[0]]);
             }
         }
+    }
+
+    private void changeDeck(int index)
+    {
+        getLangList();
+        if (actSelectedGM[0] == 1)//Learning mode
+        {
+            actSelectedLang1[0] = 0;
+            actSelectedLang2[0] = 0;
+            txtLang1.setText(langs[actSelectedLang1[0]]);
+            txtLang2.setText(langs[actSelectedLang2[0]]);
+        }
+
+        actSelectedPairs = maxPairs[index];
+        txtPairs.setText(Integer.toString(actSelectedPairs));
     }
 
     public enum GM

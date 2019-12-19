@@ -1,12 +1,14 @@
 package com.example.memolang;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.gridlayout.widget.GridLayout;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -60,7 +63,7 @@ public class game_board extends AppCompatActivity
     GridLayout gridPlayers;
     ///Lists
     ArrayList<Player> finalPlayers;
-    ArrayList<String> listImages;
+    //ArrayList<String> listImages;
     Card[][] cardBoard;
     Drawable revers;
     /// In game playing variables
@@ -84,6 +87,9 @@ public class game_board extends AppCompatActivity
 
         Intent intent = getIntent();
         hideNavigationBar();
+        SharedPreferences shPref = this.getSharedPreferences("com.example.memolang", Context.MODE_PRIVATE);
+
+        setBackground("Background/" + shPref.getString("back", "default.png"));
 
         players = intent.getIntExtra("Players", 1);
         deck = intent.getStringExtra("Deck");
@@ -107,7 +113,7 @@ public class game_board extends AppCompatActivity
 
         gridBoard = findViewById(R.id.gridBoard);
         gridPlayers = findViewById(R.id.gridPlayers);
-        revers = loadImageFromAssets("Revers/back_dark.png");
+        revers = loadImageFromAssets("Revers/" + shPref.getString("revers", "default.png"));
         setBoard();
         loadImages();
         initPlayersFinalList();
@@ -121,7 +127,7 @@ public class game_board extends AppCompatActivity
         }
         else
         {
-            txtTimer.setText("Turn");
+            txtTimer.setText(finalPlayers.get(0).name);
         }
 
         if (gm == 1) // learning mode
@@ -157,6 +163,17 @@ public class game_board extends AppCompatActivity
             reader.setPitch(1.1f);
             reader.setSpeechRate(1.1f);
         }
+    }
+
+    private void setBackground(String path)
+    {
+        ConstraintLayout back = findViewById(R.id.conLayMain);
+        ImageView imgBack = new ImageView(this);
+        LinearLayout.LayoutParams Params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        imgBack.setLayoutParams(Params1);
+        setImageFromAssets(imgBack, path);
+        imgBack.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        back.addView(imgBack, 0);
     }
 
     @Override
@@ -205,13 +222,14 @@ public class game_board extends AppCompatActivity
     private void animateShow(final int r, final int c)
     {
         final Handler handler = new Handler();
-        cardBoard[r][c].img.animate().rotationX(180).setDuration(2 * DURATION_ANIM);
+        cardBoard[r][c].img.animate().rotationX(360).setDuration(2 * DURATION_ANIM);
         cardBoard[r][c].img.animate().scaleX(0.6f).scaleY(0.6f).setDuration(DURATION_ANIM);
         handler.postDelayed(new Runnable()
         {
             @Override
             public void run()
             {
+                System.out.println("Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
                 setImageFromAssets(cardBoard[r][c].img, "Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
                 cardBoard[r][c].img.animate().scaleX(1f).scaleY(1f).setDuration(DURATION_ANIM);
             }
@@ -221,7 +239,7 @@ public class game_board extends AppCompatActivity
     private void animateHide(final int r, final int c)
     {
         final Handler handler = new Handler();
-        cardBoard[r][c].img.animate().rotationX(0).setDuration(2 * DURATION_ANIM);
+        cardBoard[r][c].img.animate().rotationX(180).setDuration(2 * DURATION_ANIM);
         cardBoard[r][c].img.animate().scaleX(0.6f).scaleY(0.6f).setDuration(DURATION_ANIM);
         handler.postDelayed(new Runnable()
         {
@@ -316,7 +334,6 @@ public class game_board extends AppCompatActivity
         int wc = gridBoard.getColumnCount();
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CARD_SIZE_PIXEL - 2 * MARGIN_SIZE_PIXELS, CARD_SIZE_PIXEL - 2 * MARGIN_SIZE_PIXELS);
         layoutParams.setMargins(MARGIN_SIZE_PIXELS, MARGIN_SIZE_PIXELS, MARGIN_SIZE_PIXELS, MARGIN_SIZE_PIXELS);
-
         View.OnClickListener onClickListener;
         onClickListener = new View.OnClickListener()
         {
@@ -329,7 +346,6 @@ public class game_board extends AppCompatActivity
                 {
                     if (!wasMatched && firstPickStatus)//previous round card wasn't matched
                     {
-                        System.out.println("previous round card wasn't matched");
                         cardBoard[firstPick[0]][firstPick[1]].isHide = true;
                         cardBoard[secondPick[0]][secondPick[1]].isHide = true;
                         animateHide(firstPick[0], firstPick[1]);
@@ -337,13 +353,11 @@ public class game_board extends AppCompatActivity
                     }
                     if (cardBoard[r][c].isHide)// CARD IS HIDDEN
                     {
-                        System.out.println("CARD IS HIDDEN");
                         cardBoard[r][c].isHide = false;
                         animateShow(r, c);
                         if (firstPickStatus) //clicking first card of the round
                         {
 
-                            System.out.println("clicking first card of the round");
                             firstPick[0] = (short) r;
                             firstPick[1] = (short) c;
                             firstPickStatus = false;
@@ -358,7 +372,6 @@ public class game_board extends AppCompatActivity
                         }
                         else //clicking second card of the round
                         {
-                            System.out.println("clicking second card of the round");
                             secondPick[0] = (short) r;
                             secondPick[1] = (short) c;
                             firstPickStatus = true;
@@ -374,7 +387,6 @@ public class game_board extends AppCompatActivity
                             }
                             if (cardBoard[firstPick[0]][firstPick[1]].matches(cardBoard[secondPick[0]][secondPick[1]])) // PAIR MATCHED
                             {
-                                System.out.println("pairs matched");
                                 finalPlayers.get(playerIndex).score++;
                                 finalPlayers.get(playerIndex).setScore();
                                 cardBoard[firstPick[0]][firstPick[1]].isMatched = true;
@@ -386,7 +398,6 @@ public class game_board extends AppCompatActivity
                             }
                             else // pair doesn't match
                             {
-                                System.out.println("pair doesn't match");
                                 wasMatched = false;
                                 nextPlayer();
                             }
@@ -418,6 +429,8 @@ public class game_board extends AppCompatActivity
             imageView.setLayoutParams(layoutParams);
             imageView.setTag((i / wc) + "_" + (i % wc));
             imageView.setOnClickListener(onClickListener);
+            imageView.setBackgroundResource(R.drawable.gradient_card);
+            imageView.setRotationX(180f);
             cardBoard[i / wc][i % wc].img = imageView;
             gridBoard.addView(imageView);
         }
@@ -532,6 +545,7 @@ public class game_board extends AppCompatActivity
             public void run()
             {
                 txtTimer.setBackgroundColor(finalPlayers.get(playerIndex).color);
+                txtTimer.setText(finalPlayers.get(playerIndex).name);
             }
         }, DURATION_ANIM);
     }
@@ -561,6 +575,7 @@ public class game_board extends AppCompatActivity
             textView.setBackgroundColor(finalPlayers.get(i).color);
             textView.setGravity(Gravity.CENTER);
             textView.setLayoutParams(layoutParams);
+            textView.setTextColor(Color.BLACK);
             gridPlayers.addView(textView);
         }
     }
@@ -584,15 +599,20 @@ public class game_board extends AppCompatActivity
         }
     }
 
+    public String getEmojiByUnicode(int unicode)
+    {
+        return new String(Character.toChars(unicode));
+    }
+
     private void initPlayersFinalList()
     {
         finalPlayers = new ArrayList<>();
-        finalPlayers.add(new Player(Color.rgb(191, 25, 25), "Red"));
-        finalPlayers.add(new Player(Color.rgb(0, 196, 207), "Blue"));
-        finalPlayers.add(new Player(Color.rgb(10, 191, 52), "Green"));
-        finalPlayers.add(new Player(Color.rgb(255, 255, 5), "Yellow"));
-        finalPlayers.add(new Player(Color.rgb(255, 105, 180), "Pink"));
-        finalPlayers.add(new Player(Color.rgb(255, 101, 0), "Orange"));
+        finalPlayers.add(new Player(Color.rgb(191, 25, 25), getEmojiByUnicode(0x1F42E))); // COW
+        finalPlayers.add(new Player(Color.rgb(0, 196, 207), getEmojiByUnicode(0x1F434))); // HORSE
+        finalPlayers.add(new Player(Color.rgb(10, 191, 52), getEmojiByUnicode(0x1F436))); // DOG
+        finalPlayers.add(new Player(Color.rgb(255, 255, 5), getEmojiByUnicode(0x1F43C))); // PANDA
+        finalPlayers.add(new Player(Color.rgb(255, 105, 180), getEmojiByUnicode(0x1F408))); // CAT
+        finalPlayers.add(new Player(Color.rgb(255, 101, 0), getEmojiByUnicode(0x1F43B))); // BEAR
     }
 
     public ArrayList<String> readLines(String filename)
@@ -632,60 +652,119 @@ public class game_board extends AppCompatActivity
     private void loadImages()
     {
 
-        Pattern pattern = Pattern.compile("([a-zA-Z]+)_(\\d+)");
+        Pattern pattern = Pattern.compile("([a-zA-Z]+)_(\\d+)_(\\d)");
         Matcher matcher;
         matcher = pattern.matcher(deck);
         matcher.matches();
 
-        ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < Integer.parseInt(matcher.group(2)); i++)
+        if (matcher.group(3).equals("2"))
         {
-            list.add(new Integer(i));
-        }
-        Collections.shuffle(list);
-        listImages = new ArrayList<>();
-
-        for (int i = 0; i < cards / 2; i++)
-        {
-            listImages.add(list.get(i) + "_0.png");
-            listImages.add(list.get(i) + "_1.png");
-        }
-        Collections.shuffle(listImages);
-
-        cardBoard = new Card[(int) Math.ceil(((double) cards) / gridBoard.getColumnCount())][];
-
-        for (int i = 0; i < cardBoard.length - 1; i++)
-        {
-            cardBoard[i] = new Card[gridBoard.getColumnCount()];
-        }
-        cardBoard[cardBoard.length - 1] = new Card[cards % gridBoard.getColumnCount() == 0 ? gridBoard.getColumnCount() : cards % gridBoard.getColumnCount()];
-
-        if (gm == 0) // GM CASUAL
-        {
-            for (int i = 0; i < cardBoard.length; i++)
+            ArrayList<String> listImages;
+            ArrayList<Integer> list = new ArrayList<>();
+            for (int i = 0; i < Integer.parseInt(matcher.group(2)); i++)
             {
-                for (int j = 0; j < cardBoard[i].length; j++)
-                {
-                    boolean zeroIndex = listImages.get(i * gridBoard.getColumnCount() + j).substring(listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_") + 1, listImages.get(i * gridBoard.getColumnCount() + j).indexOf(".")).equals("0");
-                    byte id = Byte.parseByte(listImages.get(i * gridBoard.getColumnCount() + j).substring(0, listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_")));
+                list.add(new Integer(i));
+            }
+            Collections.shuffle(list);
+            listImages = new ArrayList<>();
 
-                    cardBoard[i][j] = new Card(zeroIndex, null, null, id);
+            for (int i = 0; i < cards / 2; i++)
+            {
+                listImages.add(list.get(i) + "_0.png");
+                listImages.add(list.get(i) + "_1.png");
+            }
+            Collections.shuffle(listImages);
+
+            cardBoard = new Card[(int) Math.ceil(((double) cards) / gridBoard.getColumnCount())][];
+
+            for (int i = 0; i < cardBoard.length - 1; i++)
+            {
+                cardBoard[i] = new Card[gridBoard.getColumnCount()];
+            }
+            cardBoard[cardBoard.length - 1] = new Card[cards % gridBoard.getColumnCount() == 0 ? gridBoard.getColumnCount() : cards % gridBoard.getColumnCount()];
+
+            if (gm == 0) // GM CASUAL
+            {
+                for (int i = 0; i < cardBoard.length; i++)
+                {
+                    for (int j = 0; j < cardBoard[i].length; j++)
+                    {
+                        boolean zeroIndex = listImages.get(i * gridBoard.getColumnCount() + j).substring(listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_") + 1, listImages.get(i * gridBoard.getColumnCount() + j).indexOf(".")).equals("0");
+                        short id = Short.parseShort(listImages.get(i * gridBoard.getColumnCount() + j).substring(0, listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_")));
+
+                        cardBoard[i][j] = new Card(zeroIndex, null, null, id);
+                    }
+                }
+            }
+            else if (gm == 1)// GM LEARN MODE
+            {
+                ArrayList<String> lang1st = readLines("Decks/" + deck + "/Lang/" + language1 + "_" + langCode1 + "_" + countryCode1 + ".txt");
+                ArrayList<String> lang2nd = readLines("Decks/" + deck + "/Lang/" + language2 + "_" + langCode2 + "_" + countryCode2 + ".txt");
+
+                for (int i = 0; i < cardBoard.length; i++)
+                {
+                    for (int j = 0; j < cardBoard[i].length; j++)
+                    {
+                        boolean zeroIndex = listImages.get(i * gridBoard.getColumnCount() + j).substring(listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_") + 1, listImages.get(i * gridBoard.getColumnCount() + j).indexOf(".")).equals("0");
+                        short id = Short.parseShort(listImages.get(i * gridBoard.getColumnCount() + j).substring(0, listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_")));
+
+                        cardBoard[i][j] = new Card(zeroIndex, lang1st.get(id), lang2nd.get(id), id);
+                    }
                 }
             }
         }
-        else if (gm == 1)// GM LEARN MODE
+        else if (matcher.group(3).equals("1"))
         {
-            ArrayList<String> lang1st = readLines("Decks/" + deck + "/Lang/" + language1 + "_" + langCode1 + "_" + countryCode1 + ".txt");
-            ArrayList<String> lang2nd = readLines("Decks/" + deck + "/Lang/" + language2 + "_" + langCode2 + "_" + countryCode2 + ".txt");
-
-            for (int i = 0; i < cardBoard.length; i++)
+            String[] listCard = null;
+            try
             {
-                for (int j = 0; j < cardBoard[i].length; j++)
-                {
-                    boolean zeroIndex = listImages.get(i * gridBoard.getColumnCount() + j).substring(listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_") + 1, listImages.get(i * gridBoard.getColumnCount() + j).indexOf(".")).equals("0");
-                    byte id = Byte.parseByte(listImages.get(i * gridBoard.getColumnCount() + j).substring(0, listImages.get(i * gridBoard.getColumnCount() + j).indexOf("_")));
+                listCard = getAssets().list("Decks/" + deck + "/Cards");
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            Collections.shuffle(Arrays.asList(listCard));
+            String[] listCard2 = new String[cards];
 
-                    cardBoard[i][j] = new Card(zeroIndex, lang1st.get(id), lang2nd.get(id), id);
+            for (int i = 0; i < cards / 2; i++)
+            {
+                listCard2[i * 2] = listCard[i];
+                listCard2[i * 2 + 1] = listCard[i];
+            }
+            Collections.shuffle(Arrays.asList(listCard2));
+
+            cardBoard = new Card[(int) Math.ceil(((double) cards) / gridBoard.getColumnCount())][];
+            for (int i = 0; i < cardBoard.length - 1; i++)
+            {
+                cardBoard[i] = new Card[gridBoard.getColumnCount()];
+            }
+            cardBoard[cardBoard.length - 1] = new Card[cards % gridBoard.getColumnCount() == 0 ? gridBoard.getColumnCount() : cards % gridBoard.getColumnCount()];
+
+            if (gm == 0) // GM CASUAL
+            {
+                for (int i = 0; i < cardBoard.length; i++)
+                {
+                    for (int j = 0; j < cardBoard[i].length; j++)
+                    {
+                        short id = Short.parseShort(listCard2[i * gridBoard.getColumnCount() + j].substring(0, listCard2[i * gridBoard.getColumnCount() + j].indexOf("_")));
+
+                        cardBoard[i][j] = new Card(true, null, null, id);
+                    }
+                }
+            }
+            else if (gm == 1)// GM LEARN MODE
+            {
+                ArrayList<String> lang1st = readLines("Decks/" + deck + "/Lang/" + language1 + "_" + langCode1 + "_" + countryCode1 + ".txt");
+                ArrayList<String> lang2nd = readLines("Decks/" + deck + "/Lang/" + language2 + "_" + langCode2 + "_" + countryCode2 + ".txt");
+
+                for (int i = 0; i < cardBoard.length; i++)
+                {
+                    for (int j = 0; j < cardBoard[i].length; j++)
+                    {
+                        short id = Short.parseShort(listCard2[i * gridBoard.getColumnCount() + j].substring(0, listCard2[i * gridBoard.getColumnCount() + j].indexOf("_")));
+                        cardBoard[i][j] = new Card(true, lang1st.get(id), lang2nd.get(id), id);
+                    }
                 }
             }
         }
@@ -729,10 +808,10 @@ public class game_board extends AppCompatActivity
         boolean zeroIndex;
         String language1;
         String language2;
-        byte id;
+        short id;
         ImageView img;
 
-        public Card(boolean zeroIndex, String language1, String language2, byte id)
+        public Card(boolean zeroIndex, String language1, String language2, short id)
         {
             this.zeroIndex = zeroIndex;
             this.language1 = language1;

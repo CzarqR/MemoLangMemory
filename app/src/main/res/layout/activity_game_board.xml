@@ -22,17 +22,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:rowCount="1">
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/txtPlayer1"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:background="#FF1744"-->
-        <!--            android:gravity="center_horizontal"-->
-        <!--            android:text="Player 1\n0"-->
-        <!--            android:textSize="18sp"-->
-        <!--            app:layout_columnWeight="1"-->
-        <!--            app:layout_gravity="fill"-->
-        <!--            app:layout_rowWeight="1" />-->
 
 
     </androidx.gridlayout.widget.GridLayout>
@@ -44,6 +33,7 @@
         android:layout_marginTop="8dp"
         android:background="#FFFFFF"
         android:gravity="center"
+        android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,10 +43,14 @@
         android:id="@+id/txtLang1"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="#FFFFFF"
+        android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/gridBoard"
+        app:layout_constraintEnd_toStartOf="@+id/txtTimer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gridPlayers" />
 
@@ -64,11 +58,15 @@
         android:id="@+id/txtLang2"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="#FFFFFF"
+        android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/gridBoard"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtTimer"
         app:layout_constraintTop_toBottomOf="@+id/gridPlayers" />
 
 
@@ -86,6 +84,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTimer"
         app:rowCount="10" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imgBack"-->
+<!--        android:layout_width="fill_parent"-->
+<!--        android:layout_height="fill_parent"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@color/menuButtonText" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

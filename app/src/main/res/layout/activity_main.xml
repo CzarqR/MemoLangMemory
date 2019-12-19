@@ -5,17 +5,19 @@
     android:id="@+id/banner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8F2E2E"
-    tools:context=".MainActivity" >
+    android:background="@drawable/background"
+    tools:context=".MainActivity">
 
 
     <TextView
         android:id="@+id/txtPlayers"
-        android:layout_width="129dp"
-        android:layout_height="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lemonada"
         android:gravity="center"
         android:onClick="butSelectPlayersClick"
-        android:text="TextView"
+        android:text="2"
+        android:textColor="@color/menuButtonText"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/butSelectPlayers"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,11 +26,13 @@
 
     <TextView
         android:id="@+id/txtPairs"
-        android:layout_width="129dp"
-        android:layout_height="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lemonada"
         android:gravity="center"
         android:onClick="butSelectPairsClick"
         android:text="TextView"
+        android:textColor="@color/menuButtonText"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/butSelectPairs"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,39 +41,42 @@
 
     <TextView
         android:id="@+id/txtTimer"
-        android:layout_width="129dp"
-        android:layout_height="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lemonada"
         android:gravity="center"
         android:onClick="txtTimerClick"
         android:text="Off"
+        android:textColor="@color/menuButtonText"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/switchTimer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toEndOf="@+id/switchTimer"
         app:layout_constraintTop_toTopOf="@+id/switchTimer" />
 
     <Button
         android:id="@+id/butSelectGM"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@color/menuButtonBack"
+        android:background="@drawable/back_button"
+        android:fontFamily="@font/lemonada"
         android:onClick="butSelectGMClick"
         android:text="@string/gameMode"
         android:textColor="@color/menuButtonText"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgDeck" />
+        app:layout_constraintTop_toBottomOf="@+id/butSelectDeck" />
 
     <Button
         android:id="@+id/butSelectPlayers"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_width="248dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@color/menuButtonBack"
+        android:background="@drawable/back_button"
+        android:fontFamily="@font/lemonada"
         android:onClick="butSelectPlayersClick"
         android:text="@string/num_of_players"
         android:textColor="@color/menuButtonText"
@@ -79,11 +86,12 @@
 
     <Button
         android:id="@+id/butSelectPairs"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_width="198dp"
+        android:layout_height="45dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/menuButtonBack"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/back_button"
+        android:fontFamily="@font/lemonada"
         android:onClick="butSelectPairsClick"
         android:text="Number of pairs"
         android:textColor="@color/menuButtonText"
@@ -91,81 +99,64 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/butSelectPlayers" />
 
-    <ImageView
-        android:id="@+id/imgBanner"
-        android:layout_width="337dp"
-        android:layout_height="127dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.585"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/memo_lang_banner" />
-
     <Button
         android:id="@+id/butSelectDeck"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
         android:layout_marginStart="16dp"
-        android:background="@color/menuButtonBack"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/back_button"
+        android:fontFamily="@font/lemonada"
         android:onClick="butSelectDeckClick"
         android:text="@string/select_deck"
         android:textColor="@color/menuButtonText"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgDeck"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imgDeck" />
-
-    <ImageView
-        android:id="@+id/imgDeck"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:onClick="butSelectDeckClick"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgBanner"
-        app:srcCompat="@android:color/darker_gray" />
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
     <TextView
         android:id="@+id/txtGM"
-        android:layout_width="129dp"
-        android:layout_height="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lemonada"
         android:gravity="center"
         android:onClick="butSelectGMClick"
-        android:text="TextView"
+        android:text="Gamemode"
+        android:textColor="@color/menuButtonText"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/butSelectGM"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toEndOf="@+id/butSelectGM"
         app:layout_constraintTop_toTopOf="@+id/butSelectGM" />
 
     <Button
         android:id="@+id/butPlay"
-        android:layout_width="0dp"
+        android:layout_width="379dp"
         android:layout_height="65dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/menuButtonPlay"
+        android:background="@drawable/but_play"
+        android:fontFamily="@font/lemonada"
         android:onClick="butPlayClick"
         android:text="@string/play"
+        android:textColor="@color/menuButtonPlay"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Switch
         android:id="@+id/switchTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="145dp"
+        android:layout_height="45dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:background="@color/menuButtonBack"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/back_button"
+        android:fontFamily="@font/lemonada"
         android:onClick="switchTimerClick"
         android:scrollbarSize="10dp"
         android:text="Timer"
@@ -176,13 +167,32 @@
 
     <TextView
         android:id="@+id/txtLang1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
-        android:background="@color/menuButtonBack"
+        android:layout_width="105dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/back_button"
+        android:fontFamily="@font/lemonada"
+        android:gravity="center"
         android:onClick="txtLang1Click"
         android:text="txtxLang1"
+        android:textColor="@color/menuButtonText"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/txtLang2"
+        app:layout_constraintStart_toEndOf="@+id/txtLangSelect"
+        app:layout_constraintTop_toBottomOf="@+id/switchTimer" />
+
+    <TextView
+        android:id="@+id/txtLangSelect"
+        android:layout_width="143dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/back_button"
+        android:fontFamily="@font/lemonada"
+        android:gravity="center"
+        android:onClick="txtLang1Click"
+        android:text="Language"
         android:textColor="@color/menuButtonText"
         android:textSize="18sp"
         android:visibility="invisible"
@@ -191,18 +201,53 @@
 
     <TextView
         android:id="@+id/txtLang2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/menuButtonBack"
+        android:layout_width="105dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/back_button"
+        android:fontFamily="@font/lemonada"
+        android:gravity="center"
         android:onClick="txtLang2Click"
         android:text="txtxLang2"
         android:textColor="@color/menuButtonText"
         android:textSize="18sp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.474"
-        app:layout_constraintStart_toEndOf="@+id/txtLang1"
-        app:layout_constraintTop_toTopOf="@+id/txtLang1" />
+        app:layout_constraintTop_toBottomOf="@+id/switchTimer" />
+
+    <Button
+        android:id="@+id/butSetting"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/back_button"
+        android:fontFamily="@font/lemonada"
+        android:onClick="butSettingsClick"
+        android:text="Settings"
+        android:textColor="@color/menuButtonText"
+        app:layout_constraintBottom_toTopOf="@+id/butPlay"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/pgVdeckPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp" />
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
