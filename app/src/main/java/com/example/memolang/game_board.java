@@ -28,10 +28,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -132,8 +134,8 @@ public class game_board extends AppCompatActivity
 
         if (gm == 1) // learning mode
         {
-            locale1 = new Locale(intent.getStringExtra("LangCode1"), intent.getStringExtra("CountryCode1"));
-            locale2 = new Locale(intent.getStringExtra("LangCode2"), intent.getStringExtra("CountryCode2"));
+            locale1 = new Locale(Objects.requireNonNull(intent.getStringExtra("LangCode1")), Objects.requireNonNull(intent.getStringExtra("CountryCode1")));
+            locale2 = new Locale(Objects.requireNonNull(intent.getStringExtra("LangCode2")), Objects.requireNonNull(intent.getStringExtra("CountryCode2")));
             reader = new TextToSpeech(this, new TextToSpeech.OnInitListener()
             {
                 @Override
@@ -469,15 +471,15 @@ public class game_board extends AppCompatActivity
         }
         else //many winners
         {
-            String x = "The winner is... Draw! ";
+            StringBuilder x = new StringBuilder("The winner is... Draw! ");
 
             for (int i = 0; i < winnersIndexes.size(); i++)
             {
-                x += finalPlayers.get(winnersIndexes.get(i)).name + " and ";
+                x.append(finalPlayers.get(winnersIndexes.get(i)).name).append(" and ");
             }
-            x = x.substring(0, x.length() - 4);
-            x += "has the same score: " + max;
-            return x;
+            x = new StringBuilder(x.substring(0, x.length() - 4));
+            x.append("has the same score: ").append(max);
+            return x.toString();
         }
     }
 
@@ -587,13 +589,13 @@ public class game_board extends AppCompatActivity
         int score = 0;
         TextView txtV;
 
-        public Player(int color, String name)
+        Player(int color, String name)
         {
             this.color = color;
             this.name = name;
         }
 
-        public void setScore()
+        void setScore()
         {
             txtV.setText(name + "\n" + score);
         }
@@ -621,7 +623,7 @@ public class game_board extends AppCompatActivity
         BufferedReader reader = null;
         try
         {
-            reader = new BufferedReader(new InputStreamReader(getAssets().open(filename), "UTF-8"));
+            reader = new BufferedReader(new InputStreamReader(getAssets().open(filename), StandardCharsets.UTF_8));
             String mLine;
             while ((mLine = reader.readLine()) != null)
             {
@@ -657,13 +659,13 @@ public class game_board extends AppCompatActivity
         matcher = pattern.matcher(deck);
         matcher.matches();
 
-        if (matcher.group(3).equals("2"))
+        if (Objects.equals(matcher.group(3), "2"))
         {
             ArrayList<String> listImages;
             ArrayList<Integer> list = new ArrayList<>();
-            for (int i = 0; i < Integer.parseInt(matcher.group(2)); i++)
+            for (int i = 0; i < Integer.parseInt(Objects.requireNonNull(matcher.group(2))); i++)
             {
-                list.add(new Integer(i));
+                list.add(i);
             }
             Collections.shuffle(list);
             listImages = new ArrayList<>();
@@ -713,7 +715,7 @@ public class game_board extends AppCompatActivity
                 }
             }
         }
-        else if (matcher.group(3).equals("1"))
+        else if (Objects.equals(matcher.group(3), "1"))
         {
             String[] listCard = null;
             try
@@ -724,6 +726,7 @@ public class game_board extends AppCompatActivity
             {
                 e.printStackTrace();
             }
+            assert listCard != null;
             Collections.shuffle(Arrays.asList(listCard));
             String[] listCard2 = new String[cards];
 
@@ -780,9 +783,8 @@ public class game_board extends AppCompatActivity
             Drawable d = Drawable.createFromStream(ims, null);
             img.setImageDrawable(d);
         }
-        catch (Exception ex)
+        catch (Exception ignored)
         {
-            return;
         }
     }
 
@@ -792,8 +794,7 @@ public class game_board extends AppCompatActivity
         try
         {
             InputStream ims = assetManager.open(path);
-            Drawable d = Drawable.createFromStream(ims, null);
-            return d;
+            return Drawable.createFromStream(ims, null);
         }
         catch (Exception ex)
         {
@@ -811,7 +812,7 @@ public class game_board extends AppCompatActivity
         short id;
         ImageView img;
 
-        public Card(boolean zeroIndex, String language1, String language2, short id)
+        Card(boolean zeroIndex, String language1, String language2, short id)
         {
             this.zeroIndex = zeroIndex;
             this.language1 = language1;
@@ -819,12 +820,12 @@ public class game_board extends AppCompatActivity
             this.id = id;
         }
 
-        public boolean matches(Card card)
+        boolean matches(Card card)
         {
             return this.id == card.id;
         }
 
-        public String fileExt()//return file/image name with extension .png
+        String fileExt()//return file/image name with extension .png
         {
             return id + "_" + (zeroIndex ? 0 : 1) + ".png";
         }
