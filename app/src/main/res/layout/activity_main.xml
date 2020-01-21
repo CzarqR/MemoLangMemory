@@ -2,256 +2,292 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/banner"
+    android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/gradient_background" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.075" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.54" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vpDeckPicker"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:onClick="butPlayClick"
+        app:layout_constraintBottom_toTopOf="@+id/gl2"
+        app:layout_constraintEnd_toStartOf="@+id/gdV2"
+        app:layout_constraintStart_toStartOf="@+id/gdV1"
+        app:layout_constraintTop_toTopOf="@+id/gl1"
+        app:layout_constraintVertical_bias="0.437" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.63" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.67" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="butSettingsClick"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.96" />
 
     <TextView
         android:id="@+id/txtPlayers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/lemonada"
-        android:gravity="center"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/alfa_slab_one"
         android:onClick="butSelectPlayersClick"
-        android:text="2"
-        android:textColor="@color/menuButtonText"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/butSelectPlayers"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/butSelectPlayers"
-        app:layout_constraintTop_toTopOf="@+id/butSelectPlayers" />
+        android:text="@string/num_of_players"
+        android:textColor="#D31B2422"
+        app:layout_constraintBottom_toTopOf="@+id/gl4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/gl2" />
 
     <TextView
         android:id="@+id/txtPairs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/lemonada"
-        android:gravity="center"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/alfa_slab_one"
         android:onClick="butSelectPairsClick"
-        android:text="TextView"
-        android:textColor="@color/menuButtonText"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/butSelectPairs"
+        android:text="@string/num_pairs"
+        android:textColor="#D31B2422"
+        app:layout_constraintBottom_toTopOf="@+id/gl5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/gl4" />
+
+    <TextView
+        android:id="@+id/txtLang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/languages"
+        android:textColor="#D31B2422"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/gl7"
+        app:layout_constraintEnd_toStartOf="@+id/switchLangs"
+        app:layout_constraintTop_toTopOf="@+id/gl6" />
+
+    <Button
+        android:id="@+id/butPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/slackey"
+        android:onClick="butPlayClick"
+        android:text="@string/play"
+        android:textColor="#D2058370"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/gl8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/butSelectPairs"
-        app:layout_constraintTop_toTopOf="@+id/butSelectPairs" />
+        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gl7"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <TextView
+        android:id="@+id/txtSelectedPlayers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:onClick="butSelectPlayersClick"
+        android:textColor="#D31B2422"
+        app:layout_constraintBottom_toTopOf="@+id/gl4"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/gl2" />
+
+    <TextView
+        android:id="@+id/txtSelectedPairs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:onClick="butSelectPairsClick"
+        android:textColor="#D31B2422"
+        app:layout_constraintBottom_toTopOf="@+id/gl5"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/gl4" />
+
+    <TextView
+        android:id="@+id/txtSelectedTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:onClick="txtTimerClick"
+        android:text="@string/off"
+        android:textColor="#D31B2422"
+        app:layout_constraintBottom_toTopOf="@+id/gl6"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/gl5" />
+
+    <Switch
+        android:id="@+id/switchTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="serif"
+        android:onClick="switchTimerClick"
+        android:textColor="#D31B2422"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/gl6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/gl5" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/slackey"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="#D2058370"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/gl1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgL1"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:contentDescription="@string/lang1img"
+        android:onClick="txtLang1Click"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/gl7"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/gl6"
+        app:srcCompat="@android:color/background_light" />
+
+    <ImageView
+        android:id="@+id/imgL2"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:contentDescription="@string/lang2img"
+        android:onClick="txtLang2Click"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/gl7"
+        app:layout_constraintStart_toEndOf="@+id/imgL1"
+        app:layout_constraintTop_toTopOf="@+id/gl6"
+        app:srcCompat="@android:color/background_light" />
 
     <TextView
         android:id="@+id/txtTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/lemonada"
-        android:gravity="center"
-        android:onClick="txtTimerClick"
-        android:text="Off"
-        android:textColor="@color/menuButtonText"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/switchTimer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/switchTimer"
-        app:layout_constraintTop_toTopOf="@+id/switchTimer" />
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/select_time"
+        android:textColor="#D31B2422"
+        app:layout_constraintBottom_toTopOf="@+id/gl6"
+        app:layout_constraintEnd_toStartOf="@+id/switchTimer"
+        app:layout_constraintTop_toTopOf="@+id/gl5" />
 
-    <Button
-        android:id="@+id/butSelectGM"
-        android:layout_width="200dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/back_button"
-        android:fontFamily="@font/lemonada"
-        android:onClick="butSelectGMClick"
-        android:text="@string/gameMode"
-        android:textColor="@color/menuButtonText"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/butSelectDeck" />
-
-    <Button
-        android:id="@+id/butSelectPlayers"
-        android:layout_width="248dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/back_button"
-        android:fontFamily="@font/lemonada"
-        android:onClick="butSelectPlayersClick"
-        android:text="@string/num_of_players"
-        android:textColor="@color/menuButtonText"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/butSelectGM" />
-
-    <Button
-        android:id="@+id/butSelectPairs"
-        android:layout_width="198dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/back_button"
-        android:fontFamily="@font/lemonada"
-        android:onClick="butSelectPairsClick"
-        android:text="Number of pairs"
-        android:textColor="@color/menuButtonText"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/butSelectPlayers" />
-
-    <Button
-        android:id="@+id/butSelectDeck"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/back_button"
-        android:fontFamily="@font/lemonada"
-        android:onClick="butSelectDeckClick"
-        android:text="@string/select_deck"
-        android:textColor="@color/menuButtonText"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
-
-    <TextView
-        android:id="@+id/txtGM"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gdV1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/lemonada"
-        android:gravity="center"
-        android:onClick="butSelectGMClick"
-        android:text="Gamemode"
-        android:textColor="@color/menuButtonText"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/butSelectGM"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/butSelectGM"
-        app:layout_constraintTop_toTopOf="@+id/butSelectGM" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.06" />
 
-    <Button
-        android:id="@+id/butPlay"
-        android:layout_width="379dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="16dp"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gdV2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.94" />
+
+    <ImageButton
+        android:id="@+id/imgButSetttings"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/but_play"
-        android:fontFamily="@font/lemonada"
-        android:onClick="butPlayClick"
-        android:text="@string/play"
-        android:textColor="@color/menuButtonPlay"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="4dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/buttonSettingImage"
+        android:onClick="butSettingsClick"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/butPlay" />
 
     <Switch
-        android:id="@+id/switchTimer"
-        android:layout_width="145dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/back_button"
-        android:fontFamily="@font/lemonada"
-        android:onClick="switchTimerClick"
-        android:scrollbarSize="10dp"
-        android:text="Timer"
-        android:textColor="@color/menuButtonText"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/butSelectPairs" />
-
-    <TextView
-        android:id="@+id/txtLang1"
-        android:layout_width="105dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/back_button"
-        android:fontFamily="@font/lemonada"
-        android:gravity="center"
-        android:onClick="txtLang1Click"
-        android:text="txtxLang1"
-        android:textColor="@color/menuButtonText"
-        android:textSize="18sp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/txtLang2"
-        app:layout_constraintStart_toEndOf="@+id/txtLangSelect"
-        app:layout_constraintTop_toBottomOf="@+id/switchTimer" />
-
-    <TextView
-        android:id="@+id/txtLangSelect"
-        android:layout_width="143dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/back_button"
-        android:fontFamily="@font/lemonada"
-        android:gravity="center"
-        android:onClick="txtLang1Click"
-        android:text="Language"
-        android:textColor="@color/menuButtonText"
-        android:textSize="18sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchTimer" />
-
-    <TextView
-        android:id="@+id/txtLang2"
-        android:layout_width="105dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="16dp"
+        android:id="@+id/switchLangs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/back_button"
-        android:fontFamily="@font/lemonada"
-        android:gravity="center"
-        android:onClick="txtLang2Click"
-        android:text="txtxLang2"
-        android:textColor="@color/menuButtonText"
-        android:textSize="18sp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchTimer" />
-
-    <Button
-        android:id="@+id/butSetting"
-        android:layout_width="200dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/back_button"
-        android:fontFamily="@font/lemonada"
-        android:onClick="butSettingsClick"
-        android:text="Settings"
-        android:textColor="@color/menuButtonText"
-        app:layout_constraintBottom_toTopOf="@+id/butPlay"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/pgVdeckPicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-
-            />
-
-
-    </FrameLayout>
-
+        android:onClick="switchLangsClick"
+        app:layout_constraintBottom_toTopOf="@+id/gl7"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/gl6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

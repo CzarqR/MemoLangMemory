@@ -2,6 +2,7 @@ package com.example.memolang;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.gridlayout.widget.GridLayout;
 
 import android.app.AlertDialog;
@@ -11,18 +12,22 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,7 +42,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class game_board extends AppCompatActivity
+public class GameBoard extends AppCompatActivity
 {
     /// CONST
     final static int DURATION_ANIM = 450;
@@ -53,7 +58,7 @@ public class game_board extends AppCompatActivity
     int MARGIN_SIZE_PIXELS;
     int players;
     String deck;
-    byte gm; // 0 - casual , 1 - learning mode
+    boolean lang; // false no language
     String language1, language2, countryCode1, countryCode2, langCode1, langCode2;
     int cards;
     int time;
@@ -76,6 +81,7 @@ public class game_board extends AppCompatActivity
     boolean wasMatched = true;
     short[] firstPick = {-1, -1};
     short[] secondPick = {-1, -1};
+    int[] colors;
     Locale locale1;
     Locale locale2;
     private TextToSpeech reader;
@@ -90,14 +96,13 @@ public class game_board extends AppCompatActivity
         Intent intent = getIntent();
         hideNavigationBar();
         SharedPreferences shPref = this.getSharedPreferences("com.example.memolang", Context.MODE_PRIVATE);
-
+        colors = new int[]{shPref.getInt("primBack", SettingsActivity.COLORS_CARD_DEF[0]), shPref.getInt("secBack", SettingsActivity.COLORS_CARD_DEF[0])};
         setBackground("Background/" + shPref.getString("back", "default.png"));
-
         players = intent.getIntExtra("Players", 1);
         deck = intent.getStringExtra("Deck");
-        gm = (byte) intent.getIntExtra("GM", 0);
+        lang = intent.getBooleanExtra("Lang", false);
 
-        if (gm == 1)
+        if (lang)
         {
             language1 = intent.getStringExtra("Lang1");
             language2 = intent.getStringExtra("Lang2");
@@ -121,7 +126,10 @@ public class game_board extends AppCompatActivity
         initPlayersFinalList();
         setCardLayout();
         setPlayers();
-        txtTimer.setBackgroundColor(finalPlayers.get(0).color);
+        GradientDrawable gd = new GradientDrawable(
+                GradientDrawable.Orientation.BR_TL,
+                finalPlayers.get(0).color);
+        txtTimer.setBackground(gd);
 
         if (time > 0)
         {
@@ -132,7 +140,7 @@ public class game_board extends AppCompatActivity
             txtTimer.setText(finalPlayers.get(0).name);
         }
 
-        if (gm == 1) // learning mode
+        if (lang) // lang mode
         {
             locale1 = new Locale(Objects.requireNonNull(intent.getStringExtra("LangCode1")), Objects.requireNonNull(intent.getStringExtra("CountryCode1")));
             locale2 = new Locale(Objects.requireNonNull(intent.getStringExtra("LangCode2")), Objects.requireNonNull(intent.getStringExtra("CountryCode2")));
@@ -148,23 +156,32 @@ public class game_board extends AppCompatActivity
                         if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
                         {
                             Log.e("TTS", "Language 1 not supported");
+                            showLangProblem(getString(R.string.lang_load_problem, language1));
                         }
                         result = reader.setLanguage(locale2);
 
                         if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
                         {
                             Log.e("TTS", "Language 2 not supported");
+                            if (!language1.equals(language2))
+                                showLangProblem(getString(R.string.lang_load_problem, language2));
                         }
                     }
                     else
                     {
                         Log.e("TTS", "Initialization failed");
+                        showLangProblem(getString(R.string.lang_init_fail));
                     }
                 }
             });
             reader.setPitch(1.1f);
             reader.setSpeechRate(1.1f);
         }
+    }
+
+    private void showLangProblem(String x)
+    {
+        Toast.makeText(this, x, Toast.LENGTH_SHORT).show();
     }
 
     private void setBackground(String path)
@@ -194,6 +211,46 @@ public class game_board extends AppCompatActivity
     {
         super.onResume();
         hideNavigationBar();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (time > 0)
+        {
+            timer.cancel();
+        }
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage(R.string.back_confirm);
+        builder1.setCancelable(false);
+
+        builder1.setPositiveButton(
+                getString(R.string.yes_quit),
+                new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        GameBoard.super.onBackPressed();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                getString(R.string.keep_playing),
+                new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        hideNavigationBar();
+                        dialog.cancel();
+                        if (time > 0)
+                        {
+                            timer.start();
+                        }
+                    }
+                });
+
+        final AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 
     private int getFreeHeight()
@@ -231,7 +288,6 @@ public class game_board extends AppCompatActivity
             @Override
             public void run()
             {
-                System.out.println("Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
                 setImageFromAssets(cardBoard[r][c].img, "Decks/" + deck + "/Cards/" + cardBoard[r][c].fileExt());
                 cardBoard[r][c].img.animate().scaleX(1f).scaleY(1f).setDuration(DURATION_ANIM);
             }
@@ -283,12 +339,12 @@ public class game_board extends AppCompatActivity
 
     private void startTimer()
     {
-        timer = new CountDownTimer(time, 100)
+        timer = new CountDownTimer(time, 10)
         {
             @Override
             public void onTick(long millisUntilFinished)
             {
-                txtTimer.setText((millisUntilFinished / 1000) + ":" + ((millisUntilFinished % 1000) / 10));
+                txtTimer.setText(getString(R.string.timer, finalPlayers.get(playerIndex).name, (millisUntilFinished / 1000), (millisUntilFinished % 1000) / 100));
             }
 
             @Override
@@ -296,7 +352,7 @@ public class game_board extends AppCompatActivity
             {
                 if (firstPick[0] > -1)
                 {
-                    if (!cardBoard[firstPick[0]][firstPick[1]].isHide)
+                    if (!cardBoard[firstPick[0]][firstPick[1]].isHide && !cardBoard[firstPick[0]][firstPick[1]].isMatched)
                     {
                         cardBoard[firstPick[0]][firstPick[1]].isHide = true;
                         animateHide(firstPick[0], firstPick[1]);
@@ -304,12 +360,14 @@ public class game_board extends AppCompatActivity
                 }
                 if (secondPick[0] > -1)
                 {
-                    if (!cardBoard[secondPick[0]][secondPick[1]].isHide)
+                    if (!cardBoard[secondPick[0]][secondPick[1]].isHide && !cardBoard[secondPick[0]][secondPick[1]].isMatched)
                     {
                         cardBoard[secondPick[0]][secondPick[1]].isHide = true;
                         animateHide(secondPick[0], secondPick[1]);
                     }
                 }
+                txtLang2.setVisibility(View.INVISIBLE);
+                txtLang1.setVisibility(View.INVISIBLE);
                 firstPickStatus = true;
                 wasMatched = true;
                 nextPlayerNoDelay();
@@ -327,7 +385,7 @@ public class game_board extends AppCompatActivity
         gridBoard.setColumnCount(wc);
         gridBoard.setRowCount(hc);
 
-        CARD_SIZE_PIXEL = convertDpToPixel((double) w / wc >= (double) h / hc ? h / hc : w / wc, this);
+        CARD_SIZE_PIXEL = convertDpToPixel((double) w / wc >= (double) h / hc ? (float) h / hc : (float) w / wc, this);
         MARGIN_SIZE_PIXELS = convertDpToPixel(DP_MARGIN, this);
     }
 
@@ -363,13 +421,14 @@ public class game_board extends AppCompatActivity
                             firstPick[0] = (short) r;
                             firstPick[1] = (short) c;
                             firstPickStatus = false;
-                            if (gm == 1)// LEARNING MODE
+                            if (lang)// language mode
                             {
+                                txtLang1.setVisibility(View.VISIBLE);
+                                txtLang2.setVisibility(View.INVISIBLE);
                                 txtLang1.setText(cardBoard[r][c].language1);
                                 reader.stop();
                                 reader.setLanguage(locale1);
                                 reader.speak(cardBoard[r][c].language1, TextToSpeech.QUEUE_ADD, null, null);
-                                txtLang2.setText("");
                             }
                         }
                         else //clicking second card of the round
@@ -377,8 +436,9 @@ public class game_board extends AppCompatActivity
                             secondPick[0] = (short) r;
                             secondPick[1] = (short) c;
                             firstPickStatus = true;
-                            if (gm == 1) // LEARNING MODE
+                            if (lang) // language mode
                             {
+                                txtLang2.setVisibility(View.VISIBLE);
                                 txtLang2.setText(cardBoard[r][c].language2);
                                 reader.setLanguage(locale2);
                                 reader.speak(cardBoard[r][c].language2, TextToSpeech.QUEUE_ADD, null, null);
@@ -424,6 +484,10 @@ public class game_board extends AppCompatActivity
             }
         };
 
+        GradientDrawable gd = new GradientDrawable(
+                GradientDrawable.Orientation.BR_TL,
+                colors);
+
         for (int i = 0; i < cards; i++)
         {
             ImageView imageView = new ImageView(this);
@@ -431,7 +495,7 @@ public class game_board extends AppCompatActivity
             imageView.setLayoutParams(layoutParams);
             imageView.setTag((i / wc) + "_" + (i % wc));
             imageView.setOnClickListener(onClickListener);
-            imageView.setBackgroundResource(R.drawable.gradient_card);
+            imageView.setBackground(gd);
             imageView.setRotationX(180f);
             cardBoard[i / wc][i % wc].img = imageView;
             gridBoard.addView(imageView);
@@ -442,7 +506,7 @@ public class game_board extends AppCompatActivity
     {
         if (players == 1)
         {
-            return "The winner is... There was only one player so its only one option: " + finalPlayers.get(0).name;
+            return getString(R.string.the_winner_is) + getString(R.string.win_one_option, finalPlayers.get(0).name);
         }
         int max = finalPlayers.get(0).score;
         ArrayList<Integer> winnersIndexes = new ArrayList<>();
@@ -463,22 +527,22 @@ public class game_board extends AppCompatActivity
 
         if (winnersIndexes.size() == 1)//only one winner
         {
-            return "The winner is... " + finalPlayers.get(winnersIndexes.get(0)).name + "! With score " + max;
+            return getString(R.string.the_winner_is) + finalPlayers.get(winnersIndexes.get(0)).name + getString(R.string.with_score) + " " + max;
         }
         else if (winnersIndexes.size() == players && players > 2) //all players with the same score and number of players is more than 2
         {
-            return "The winner is... Everyone!!! with score " + max;
+            return getString(R.string.the_winner_is) + " " + getString(R.string.everyone_with_score) + ": " + max;
         }
         else //many winners
         {
-            StringBuilder x = new StringBuilder("The winner is... Draw! ");
+            StringBuilder x = new StringBuilder(getString(R.string.the_winner_is) + getString(R.string.draw) + " ");
 
             for (int i = 0; i < winnersIndexes.size(); i++)
             {
-                x.append(finalPlayers.get(winnersIndexes.get(i)).name).append(" and ");
+                x.append(finalPlayers.get(winnersIndexes.get(i)).name).append(" ").append(getString(R.string.and)).append(" ");
             }
-            x = new StringBuilder(x.substring(0, x.length() - 4));
-            x.append("has the same score: ").append(max);
+            x = new StringBuilder(x.substring(0, x.length() - getString(R.string.and).length() - 1));
+            x.append(getString(R.string.has_score)).append(" ").append(max);
             return x.toString();
         }
     }
@@ -490,7 +554,7 @@ public class game_board extends AppCompatActivity
         builder1.setCancelable(false);
 
         builder1.setPositiveButton(
-                "Play again",
+                getString(R.string.play_again),
                 new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int id)
@@ -502,7 +566,7 @@ public class game_board extends AppCompatActivity
                 });
 
         builder1.setNeutralButton(
-                "Menu",
+                getString(R.string.menu),
                 new DialogInterface.OnClickListener()
                 {
                     public void onClick(DialogInterface dialog, int id)
@@ -546,8 +610,11 @@ public class game_board extends AppCompatActivity
             @Override
             public void run()
             {
-                txtTimer.setBackgroundColor(finalPlayers.get(playerIndex).color);
+                GradientDrawable gd = new GradientDrawable(
+                        GradientDrawable.Orientation.BR_TL,
+                        finalPlayers.get(playerIndex).color);
                 txtTimer.setText(finalPlayers.get(playerIndex).name);
+                txtTimer.setBackground(gd);
             }
         }, DURATION_ANIM);
     }
@@ -556,40 +623,52 @@ public class game_board extends AppCompatActivity
     {
         playerIndex++;
         playerIndex %= players;
-        txtTimer.setBackgroundColor(finalPlayers.get(playerIndex).color);
+        GradientDrawable gd = new GradientDrawable(
+                GradientDrawable.Orientation.BR_TL,
+                finalPlayers.get(playerIndex).color);
+        txtTimer.setText(finalPlayers.get(playerIndex).name);
+        txtTimer.setBackground(gd);
     }
 
     private void setPlayers()
     {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int w = displayMetrics.widthPixels - 10; // minus 4 to set little bigger margin
+
+        int w = displayMetrics.widthPixels - convertDpToPixel(12f, this); // minus 4 to set little bigger margin
         w /= players;
         gridPlayers.setColumnCount(players);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(w - convertDpToPixel(2 * DP_MARGIN_PLAYERS, this), convertDpToPixel(DP_PLAYERS, this));
         layoutParams.setMargins(convertDpToPixel(DP_MARGIN_PLAYERS, this), 0, convertDpToPixel(DP_MARGIN_PLAYERS, this), 0);
         Collections.shuffle(finalPlayers);
+        Typeface font = ResourcesCompat.getFont(this, R.font.antic);
         for (int i = 0; i < players; i++)
         {
             TextView textView = new TextView(this);
-            textView.setText(finalPlayers.get(i).name + "\n0");
+            textView.setText(getString(R.string.score_player, finalPlayers.get(i).name, 0));
             finalPlayers.get(i).txtV = textView;
-            textView.setBackgroundColor(finalPlayers.get(i).color);
+            GradientDrawable gd = new GradientDrawable(
+                    GradientDrawable.Orientation.BR_TL,
+                    finalPlayers.get(i).color);
+            txtTimer.setBackground(gd);
+            textView.setBackground(gd);
             textView.setGravity(Gravity.CENTER);
             textView.setLayoutParams(layoutParams);
             textView.setTextColor(Color.BLACK);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            textView.setTypeface(font);
             gridPlayers.addView(textView);
         }
     }
 
     private class Player
     {
-        int color;
+        int[] color;
         String name;
         int score = 0;
         TextView txtV;
 
-        Player(int color, String name)
+        Player(int[] color, String name)
         {
             this.color = color;
             this.name = name;
@@ -597,7 +676,7 @@ public class game_board extends AppCompatActivity
 
         void setScore()
         {
-            txtV.setText(name + "\n" + score);
+            txtV.setText(getString(R.string.score_player, name, score));
         }
     }
 
@@ -609,44 +688,27 @@ public class game_board extends AppCompatActivity
     private void initPlayersFinalList()
     {
         finalPlayers = new ArrayList<>();
-        finalPlayers.add(new Player(Color.rgb(191, 25, 25), getEmojiByUnicode(0x1F42E))); // COW
-        finalPlayers.add(new Player(Color.rgb(0, 196, 207), getEmojiByUnicode(0x1F434))); // HORSE
-        finalPlayers.add(new Player(Color.rgb(10, 191, 52), getEmojiByUnicode(0x1F436))); // DOG
-        finalPlayers.add(new Player(Color.rgb(255, 255, 5), getEmojiByUnicode(0x1F43C))); // PANDA
-        finalPlayers.add(new Player(Color.rgb(255, 105, 180), getEmojiByUnicode(0x1F408))); // CAT
-        finalPlayers.add(new Player(Color.rgb(255, 101, 0), getEmojiByUnicode(0x1F43B))); // BEAR
+        finalPlayers.add(new Player(new int[]{0xFFfc354c, 0xFF0abfbc}, getEmojiByUnicode(0x1F42E))); // COW
+        finalPlayers.add(new Player(new int[]{0xFF3d7eaa, 0xFFffe47a}, getEmojiByUnicode(0x1F434))); // HORSE
+        finalPlayers.add(new Player(new int[]{0xFF2bc0e4, 0xFFeaecc6}, getEmojiByUnicode(0x1F436))); // DOG
+        finalPlayers.add(new Player(new int[]{0xFFff4e50, 0xFFf9d423}, getEmojiByUnicode(0x1F43C))); // PANDA
+        finalPlayers.add(new Player(new int[]{0xFFFF69B4, 0xFFfecfef}, getEmojiByUnicode(0x1F408))); // CAT
+        finalPlayers.add(new Player(new int[]{0xFFFFFF00, 0xFFFFFFE0}, getEmojiByUnicode(0x1F43B))); // BEAR
     }
 
     public ArrayList<String> readLines(String filename)
     {
         ArrayList<String> lang = new ArrayList<>();
-        BufferedReader reader = null;
-        try
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open(filename), StandardCharsets.UTF_8)))
         {
-            reader = new BufferedReader(new InputStreamReader(getAssets().open(filename), StandardCharsets.UTF_8));
             String mLine;
             while ((mLine = reader.readLine()) != null)
             {
                 lang.add(mLine);
             }
         }
-        catch (IOException e)
+        catch (IOException ignored)
         {
-            e.printStackTrace();
-        }
-        finally
-        {
-            if (reader != null)
-            {
-                try
-                {
-                    reader.close();
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
         }
         return lang;
     }
@@ -685,7 +747,7 @@ public class game_board extends AppCompatActivity
             }
             cardBoard[cardBoard.length - 1] = new Card[cards % gridBoard.getColumnCount() == 0 ? gridBoard.getColumnCount() : cards % gridBoard.getColumnCount()];
 
-            if (gm == 0) // GM CASUAL
+            if (!lang) // normal mode
             {
                 for (int i = 0; i < cardBoard.length; i++)
                 {
@@ -698,7 +760,7 @@ public class game_board extends AppCompatActivity
                     }
                 }
             }
-            else if (gm == 1)// GM LEARN MODE
+            else if (lang)// language mode
             {
                 ArrayList<String> lang1st = readLines("Decks/" + deck + "/Lang/" + language1 + "_" + langCode1 + "_" + countryCode1 + ".txt");
                 ArrayList<String> lang2nd = readLines("Decks/" + deck + "/Lang/" + language2 + "_" + langCode2 + "_" + countryCode2 + ".txt");
@@ -722,9 +784,8 @@ public class game_board extends AppCompatActivity
             {
                 listCard = getAssets().list("Decks/" + deck + "/Cards");
             }
-            catch (IOException e)
+            catch (IOException ignored)
             {
-                e.printStackTrace();
             }
             assert listCard != null;
             Collections.shuffle(Arrays.asList(listCard));
@@ -744,7 +805,7 @@ public class game_board extends AppCompatActivity
             }
             cardBoard[cardBoard.length - 1] = new Card[cards % gridBoard.getColumnCount() == 0 ? gridBoard.getColumnCount() : cards % gridBoard.getColumnCount()];
 
-            if (gm == 0) // GM CASUAL
+            if (!lang) // normal mode
             {
                 for (int i = 0; i < cardBoard.length; i++)
                 {
@@ -756,7 +817,7 @@ public class game_board extends AppCompatActivity
                     }
                 }
             }
-            else if (gm == 1)// GM LEARN MODE
+            else if (lang)// language mode
             {
                 ArrayList<String> lang1st = readLines("Decks/" + deck + "/Lang/" + language1 + "_" + langCode1 + "_" + countryCode1 + ".txt");
                 ArrayList<String> lang2nd = readLines("Decks/" + deck + "/Lang/" + language2 + "_" + langCode2 + "_" + countryCode2 + ".txt");
@@ -785,6 +846,7 @@ public class game_board extends AppCompatActivity
         }
         catch (Exception ignored)
         {
+            Log.e("NoImage", "Couldn't lod image from path: " + path);
         }
     }
 

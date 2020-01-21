@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".game_board">
+    tools:context=".GameBoard">
 
 
     <androidx.gridlayout.widget.GridLayout
@@ -23,7 +23,6 @@
         app:rowCount="1">
 
 
-
     </androidx.gridlayout.widget.GridLayout>
 
     <TextView
@@ -32,42 +31,53 @@
         android:layout_height="25dp"
         android:layout_marginTop="8dp"
         android:background="#FFFFFF"
+        android:fontFamily="@font/antic"
         android:gravity="center"
         android:textColor="#000000"
         android:textSize="18sp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gridPlayers" />
 
     <TextView
         android:id="@+id/txtLang1"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="#FFFFFF"
+        android:fontFamily="@font/antic"
+        android:gravity="center"
         android:textColor="#000000"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/gridBoard"
+        android:visibility="invisible"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTimer"
         app:layout_constraintEnd_toStartOf="@+id/txtTimer"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridPlayers" />
+        app:layout_constraintTop_toBottomOf="@+id/gridPlayers"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/txtLang2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="#FFFFFF"
+        android:fontFamily="@font/antic"
+        android:gravity="center"
         android:textColor="#000000"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/gridBoard"
+        android:visibility="invisible"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTimer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtTimer"
-        app:layout_constraintTop_toBottomOf="@+id/gridPlayers" />
+        app:layout_constraintTop_toTopOf="@+id/txtTimer" />
 
 
     <androidx.gridlayout.widget.GridLayout

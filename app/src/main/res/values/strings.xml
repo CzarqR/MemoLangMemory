@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">MemoLang</string>
-    <string name="Example">English</string>
     <string name="select_deck">Select Deck</string>
     <string name="logo" translatable="false">Logo</string>
     <string name="select">Select</string>
@@ -8,12 +7,48 @@
     <string name="learnMode">Learning Mode</string>
     <string name="select_GM">Select Game Mode</string>
     <string name="gameMode">Game Mode</string>
-    <string name="num_of_players">Number of Players</string>
+    <string name="num_of_players">Players</string>
     <string name="select_players">Select number of players</string>
     <string name="play">Play</string>
-    <string name="num_pairs">Number of Pairs</string>
-    <string name="select_time">Time per round</string>
+    <string name="num_pairs">Pairs</string>
+    <string name="select_time">Timer</string>
     <string name="select_lang1">Choose first language</string>
     <string name="select_lang2">Choose second language</string>
+    <string name="languages">Languages</string>
+    <string name="settings">Settings</string>
+    <string name="off">Off</string>
+    <string name="background">Background</string>
+    <string name="lang1img" translatable="false">Language 1 image</string>
+    <string name="lang2img" translatable="false">Language 2 image</string>
+    <string name="buttonSettingImage" translatable="false">Button Setting Image</string>
+    <string name="card_background">Card Background</string>
+    <string name="_1st_color">1st color</string>
+    <string name="_2nd_color">2nd color</string>
+    <string name="credits">Credits</string>
+    <string name="apply">Apply</string>
+    <string name="card_revers">Card Revers</string>
+    <string name="def">Default</string>
+    <string name="gradient_back_card" translatable="false">Gradient background card</string>
+    <string name="timer" translatable="false">%1$s %2$d:%3$d</string>
+    <string name="Help">TODO</string>
+    <string name="score_player" translatable="false">%1$s\n%2$d</string>
+    <string name="help_text">To change the background or deck, slide your finger across the photo</string>
+    <string name="win_one_option">There was only one player so its only one option: %1$s</string>
+    <string name="the_winner_is">The winner is...</string>
+    <string name="menu" translatable="false">Menu</string>
+    <string name="play_again">Play again</string>
+    <string name="help">Help</string>
+    <string name="everyone_with_score">Everyone!!! With score</string>
+    <string name="with_score">! With score</string>
+    <string name="draw">Draw!</string>
+    <string name="and">and</string>
+    <string name="has_score">has the same score:</string>
+    <string name="back_confirm">Are you sure you want to leave?</string>
+    <string name="yes_quit">Yes, I want to quit</string>
+    <string name="keep_playing">Keep playing</string>
+    <string name="welcome_msg">Hello! blah blah blah\\n</string>
+    <string name="lets_start">Lets start!</string>
+    <string name="lang_load_problem">%1$s isn\'t supported by Your phone</string>
+    <string name="lang_init_fail">Languege speaker failed</string>
 
 </resources>
