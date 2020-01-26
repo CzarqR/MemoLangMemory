@@ -33,6 +33,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// If someone is reading this code or I am older and decide to look at my old app. I know... many things could me make better xD
 public class MainActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener
 {
     ///  CONST
@@ -106,6 +107,10 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
         actSelectedPlayer = shPref.getInt("playersPref", 2);
         actSelectedDeck = new int[]{shPref.getInt("lastDeck", decks_path.length / 2)};
+        if (actSelectedDeck[0] > decks_path.length)
+        {
+            actSelectedDeck[0] = decks_path.length / 2;
+        }
         actSelectedPairs = shPref.getInt("pairsPref", 16);
 
         if (shPref.getBoolean("timerOnPref", false))
@@ -130,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         txtSelectedPairs.setText(String.format(getResources().getConfiguration().locale, "%d", actSelectedPairs));
 
         setDeckPicker();
-        //welcomeMsg();
     }
 
     private void loadLanguages()
@@ -218,12 +222,13 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
             shPref.edit().putInt("secBack", SettingsActivity.COLORS_CARD_DEF[1]).apply();
             shPref.edit().putInt("playersPref", 2).apply();
             shPref.edit().putInt("pairsPref", 16).apply();
-            shPref.edit().putInt("lastDeck", decks_path.length / 2).apply();
+            shPref.edit().putInt("lastDeck", decks_path.length / 2 - 1).apply();
             shPref.edit().putBoolean("timerOnPref", false).apply();
             shPref.edit().putInt("timePref", BASE_TIMER).apply();
             shPref.edit().putBoolean("langOnPref", true).apply();
             shPref.edit().putString("lang1Pref", "English").apply();
             shPref.edit().putString("lang2Pref", "Polski").apply();
+            shPref.edit().putBoolean("firstGame", true).apply();
             welcomeMsg();
         }
     }
@@ -231,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     public void welcomeMsg()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.welcome_msg);
+        builder.setMessage(getString(R.string.welcome_msg, GameBoard.getEmojiByUnicode(0x2764), GameBoard.getEmojiByUnicode(0x1F605), getString(R.string.email)));
         builder.setCancelable(false);
 
         builder.setPositiveButton(
@@ -246,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
         final AlertDialog welcome = builder.create();
         welcome.show();
+        Objects.requireNonNull(welcome.getWindow()).setBackgroundDrawableResource(R.drawable.gradient_background_msg);
     }
 
     private void setDeckPicker()
@@ -537,6 +543,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+        //Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(R.drawable.gradient_background_picker);
     }
 
     private void itemSelected(String[] list, int[] index) /// functions executed after picking value in dialog

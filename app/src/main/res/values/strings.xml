@@ -30,11 +30,11 @@
     <string name="def">Default</string>
     <string name="gradient_back_card" translatable="false">Gradient background card</string>
     <string name="timer" translatable="false">%1$s %2$d:%3$d</string>
-    <string name="Help">TODO</string>
+    <string name="help_long">TODO</string>
     <string name="score_player" translatable="false">%1$s\n%2$d</string>
-    <string name="help_text">To change the background or deck, slide your finger across the photo</string>
+    <string name="help_text">\tTo change the deck, game background or card revers, slide your finger across the photo\n\tInside card background is changed by chosing 2 colors. If you want you can set it transparent.</string>
     <string name="win_one_option">There was only one player so its only one option: %1$s</string>
-    <string name="the_winner_is">The winner is...</string>
+    <string name="the_winner_is">The winner is…</string>
     <string name="menu" translatable="false">Menu</string>
     <string name="play_again">Play again</string>
     <string name="help">Help</string>
@@ -46,9 +46,12 @@
     <string name="back_confirm">Are you sure you want to leave?</string>
     <string name="yes_quit">Yes, I want to quit</string>
     <string name="keep_playing">Keep playing</string>
-    <string name="welcome_msg">Hello! blah blah blah\\n</string>
+    <string name="welcome_msg">Hi! Thank you for downloading the application %1$s\n\tWe are currently in the main menu. Here you can choose a set of cards, number of players, time per round and languages. You can turn off the language option if you want to play traditional memory.\n\tTo change the set of cards, move the picture to the right or left.\n\tTo change the language, press the flag and select a new one (different sets of cards have different languages)\n\tIn the right bottom corner You can go to settings.\n\tUnfortunately I have not completed any philology so translations into languages other than Polish and English may contain errors because the translation was done by Uncle Google %2$s\n\tIf you are interested in volunteering and would like to translate a set of cards into a new language or correct the current translation, please contact with: %3$s</string>
     <string name="lets_start">Lets start!</string>
     <string name="lang_load_problem">%1$s isn\'t supported by Your phone</string>
     <string name="lang_init_fail">Languege speaker failed</string>
+    <string name="email" translatable="false">myniprojects@gmail.com</string>
+    <string name="credits_info">\tAll these beautiful images used in this app comes from:\nflaticon.com\nfreepik.com\n\n\tIf you have the rights to any pictures and do not want us to use them, please contact: %1$s</string>
+    <string name="first_game_msg">This is what the game board looks like. If you\'ve never played memory before, the main goal of the game is to collect as many pairs as possible. Each card has a picture and there is a second card on the board that matches it. Each player in his turn reveals 2 cards if they are the same, he gets another chance, if not the next player starts the next turn. Simple!\n\tDepending on your phone and android version, some languages may not work. \n\t(Tip: if you accidentally mistook the queue then holding down the name of the player will go to his queue)</string>
 
 </resources>

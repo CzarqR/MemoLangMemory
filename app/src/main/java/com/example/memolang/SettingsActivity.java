@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
@@ -135,7 +136,7 @@ public class SettingsActivity extends AppCompatActivity
             reversListPaths[i] = "Revers/" + reversList[i];
         }
 
-        ImageAdapter imageAdapter = new ImageAdapter(this, reversListPaths, ImageView.ScaleType.CENTER_CROP);
+        ImageAdapter imageAdapter = new ImageAdapter(this, reversListPaths, ImageView.ScaleType.FIT_CENTER);
         vPgRevers.setAdapter(imageAdapter);
         vPgRevers.setCurrentItem(findIndex(reversList, nameToSet));
         vPgRevers.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
@@ -174,7 +175,7 @@ public class SettingsActivity extends AppCompatActivity
     {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Credits");
-        alertDialog.setMessage("Image used in this app comes from:\nfreepngimg.com\nflaticon.com\npexels.com\npngtree.com\n\nIf You owe right to of pictures used in this project and You don't want it to be used, contact us");
+        alertDialog.setMessage(getString(R.string.credits_info, getString(R.string.email)));
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener()
                 {
@@ -194,12 +195,13 @@ public class SettingsActivity extends AppCompatActivity
             }
         });
         alertDialog.show();
+        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawableResource(R.drawable.gradient_background_msg);
     }
 
     public void butHelpClick(View view)
     {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("Help");
+        alertDialog.setTitle(getString(R.string.help));
         alertDialog.setMessage(getString(R.string.help_text));
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener()
@@ -219,6 +221,7 @@ public class SettingsActivity extends AppCompatActivity
             }
         });
         alertDialog.show();
+        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawableResource(R.drawable.gradient_background_msg);
     }
 
     public void pickColor(View view)

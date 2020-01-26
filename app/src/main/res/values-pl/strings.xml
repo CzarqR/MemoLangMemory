@@ -23,11 +23,11 @@
     <string name="apply">Zatwierdź</string>
     <string name="card_background">Tło karty</string>
     <string name="credits">Uznanie</string>
-    <string name="help_text">Aby zmienić tło lub talię przesuń palcem po zdjęciu</string>
+    <string name="help_text">\tAby Zmienić zestaw kart, tło gry lub rewers karty przesun palcem w prawo lub lewo na zdjęciu.\n\tWewnętrzne tło karty ustawiane jest poprzez wybór dwóch kolorów. Jeśli chcesz możesz ustawić je przeźroczyste.</string>
     <string name="def">Domyślne</string>
-    <string name="Help">doZrobienia</string>
+    <string name="help_long">doZrobienia</string>
     <string name="win_one_option">Był tylko jeden gracz więc opcja jest tylko jedna: %1$s</string>
-    <string name="the_winner_is">Zwyciezcą jest...</string>
+    <string name="the_winner_is">Zwyciezcą jest…</string>
     <string name="play_again">Zagraj ponownie</string>
     <string name="help">Pomoc</string>
     <string name="with_score">! Z wynikiem</string>
@@ -38,8 +38,11 @@
     <string name="back_confirm">Czy jesteś pewny że chcesz wyjść?</string>
     <string name="yes_quit">Tak, chce wyjść</string>
     <string name="keep_playing">Graj delaj</string>
-    <string name="welcome_msg">Cześć! Dziękuje za pobranie aplikacji :D aby ropocząć gre blah blah bla</string>
     <string name="lets_start">Zaczynajmy!</string>
     <string name="lang_load_problem">%1$s nie jest wspierany przez Twój telefon</string>
     <string name="lang_init_fail">Załadowanie mówcy nie powiodło się</string>
+    <string name="credits_info">\tWszystkie piękne obrazki użyte w tej aplikacji pochodzą z: \nflaticon.com \nfreepik.com \n\n\tJeśli masz prawa do jakichkolwiek zdjęć i nie chcesz, abyśmy ich używali, skontaktuj się z: %1$s</string>
+    <string name="welcome_msg">Cześć! Dziękuje za pobranie aplikacji %1$s\n\tObecnie znajdujemy się w menu głównym. Tutaj możesz wybrać zestaw kart, liczbe graczy, czas na runde oraz języki. Opcję języków możesz wyłączyć jeśli chcesz grać w tradycyjne memory.\n\tAby zmienić zestaw kart przesuń obrazek w prawo lub lewo.\n\tAby zmienić język naciśnij na flagę i wybierz nowy (różne zestawy kart mają różne języki).\n\tW prawym dolnym rogu ekranu możesz przejść do ustawień.\n\tNiestety nie ukończyłem żadnej filolgii więc tłumaczenia na inne języki niż Polski i Angielski mogą zawierać błędy ponieważ tłumaczeniem zajął się wujek Google %2$s\n\tJeśli jesteś zainteresowany wolontariatem i chciałbyś przetłumaczyć jakiś zestaw kart na nowy język lub dokonać korekcji obecnego tłumczenia, skontaktuj się z: %3$s
+</string>
+    <string name="first_game_msg">Tak wygląda plansza z grą. Jeśli nigdy wcześniej nie grałeś w memory  to głównym celem gry jest zebranie jak najwięcej par. Każda karta posiada obrazek i na planszy jest druga karta która jej odpowiada. Każdy gracz w swojej turze odkrywa 2 karty jeśli są takie same to dostaje kolejną szanse, jeśli nie to następną turę zaczyna następny gracz. Proste!\n\tW zależności od telefonu i wersji androida mogą nie działać niektóre języki. \n\t(Porada: jeśli przez przypadek pomyliliście kolejkę to przytrzymując nazwę gracza przejdziecie do jego kolejki) </string>
 </resources>

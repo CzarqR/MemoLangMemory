@@ -177,6 +177,37 @@ public class GameBoard extends AppCompatActivity
             reader.setPitch(1.1f);
             reader.setSpeechRate(1.1f);
         }
+        if (shPref.getBoolean("firstGame", false))
+        {
+            showWelcomeMsg();
+            shPref.edit().putBoolean("firstGame", false).apply();
+        }
+    }
+
+    private void showWelcomeMsg()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.first_game_msg));
+        builder.setCancelable(false);
+
+        builder.setPositiveButton(
+                getString(R.string.lets_start),
+                new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        dialog.cancel();
+                        if (time > 0)
+                        {
+                            finish();
+                            startActivity(getIntent());
+                        }
+                    }
+                });
+
+        final AlertDialog welcome = builder.create();
+        welcome.show();
+        Objects.requireNonNull(welcome.getWindow()).setBackgroundDrawableResource(R.drawable.gradient_background_msg);
     }
 
     private void showLangProblem(String x)
@@ -220,11 +251,11 @@ public class GameBoard extends AppCompatActivity
         {
             timer.cancel();
         }
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage(R.string.back_confirm);
-        builder1.setCancelable(false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.back_confirm);
+        builder.setCancelable(false);
 
-        builder1.setPositiveButton(
+        builder.setPositiveButton(
                 getString(R.string.yes_quit),
                 new DialogInterface.OnClickListener()
                 {
@@ -234,7 +265,7 @@ public class GameBoard extends AppCompatActivity
                     }
                 });
 
-        builder1.setNegativeButton(
+        builder.setNegativeButton(
                 getString(R.string.keep_playing),
                 new DialogInterface.OnClickListener()
                 {
@@ -249,8 +280,9 @@ public class GameBoard extends AppCompatActivity
                     }
                 });
 
-        final AlertDialog alert11 = builder1.create();
-        alert11.show();
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawableResource(R.drawable.gradient_background_msg);
     }
 
     private int getFreeHeight()
@@ -339,7 +371,7 @@ public class GameBoard extends AppCompatActivity
 
     private void startTimer()
     {
-        timer = new CountDownTimer(time, 10)
+        timer = new CountDownTimer(time, 100)
         {
             @Override
             public void onTick(long millisUntilFinished)
@@ -350,30 +382,35 @@ public class GameBoard extends AppCompatActivity
             @Override
             public void onFinish()
             {
-                if (firstPick[0] > -1)
-                {
-                    if (!cardBoard[firstPick[0]][firstPick[1]].isHide && !cardBoard[firstPick[0]][firstPick[1]].isMatched)
-                    {
-                        cardBoard[firstPick[0]][firstPick[1]].isHide = true;
-                        animateHide(firstPick[0], firstPick[1]);
-                    }
-                }
-                if (secondPick[0] > -1)
-                {
-                    if (!cardBoard[secondPick[0]][secondPick[1]].isHide && !cardBoard[secondPick[0]][secondPick[1]].isMatched)
-                    {
-                        cardBoard[secondPick[0]][secondPick[1]].isHide = true;
-                        animateHide(secondPick[0], secondPick[1]);
-                    }
-                }
-                txtLang2.setVisibility(View.INVISIBLE);
-                txtLang1.setVisibility(View.INVISIBLE);
-                firstPickStatus = true;
-                wasMatched = true;
+                changePlayer();
                 nextPlayerNoDelay();
                 startTimer();
             }
         }.start();
+    }
+
+    private void changePlayer()
+    {
+        if (firstPick[0] > -1)
+        {
+            if (!cardBoard[firstPick[0]][firstPick[1]].isHide && !cardBoard[firstPick[0]][firstPick[1]].isMatched)
+            {
+                cardBoard[firstPick[0]][firstPick[1]].isHide = true;
+                animateHide(firstPick[0], firstPick[1]);
+            }
+        }
+        if (secondPick[0] > -1)
+        {
+            if (!cardBoard[secondPick[0]][secondPick[1]].isHide && !cardBoard[secondPick[0]][secondPick[1]].isMatched)
+            {
+                cardBoard[secondPick[0]][secondPick[1]].isHide = true;
+                animateHide(secondPick[0], secondPick[1]);
+            }
+        }
+        txtLang2.setVisibility(View.INVISIBLE);
+        txtLang1.setVisibility(View.INVISIBLE);
+        firstPickStatus = true;
+        wasMatched = true;
     }
 
     private void setBoard()
@@ -423,12 +460,11 @@ public class GameBoard extends AppCompatActivity
                             firstPickStatus = false;
                             if (lang)// language mode
                             {
+                                reader.setLanguage(locale1);
+                                reader.speak(cardBoard[r][c].language1, TextToSpeech.QUEUE_FLUSH, null, null);
                                 txtLang1.setVisibility(View.VISIBLE);
                                 txtLang2.setVisibility(View.INVISIBLE);
                                 txtLang1.setText(cardBoard[r][c].language1);
-                                reader.stop();
-                                reader.setLanguage(locale1);
-                                reader.speak(cardBoard[r][c].language1, TextToSpeech.QUEUE_ADD, null, null);
                             }
                         }
                         else //clicking second card of the round
@@ -438,10 +474,10 @@ public class GameBoard extends AppCompatActivity
                             firstPickStatus = true;
                             if (lang) // language mode
                             {
-                                txtLang2.setVisibility(View.VISIBLE);
-                                txtLang2.setText(cardBoard[r][c].language2);
                                 reader.setLanguage(locale2);
                                 reader.speak(cardBoard[r][c].language2, TextToSpeech.QUEUE_ADD, null, null);
+                                txtLang2.setVisibility(View.VISIBLE);
+                                txtLang2.setText(cardBoard[r][c].language2);
                             }
                             if (time > 0)
                             {
@@ -549,11 +585,11 @@ public class GameBoard extends AppCompatActivity
 
     private void endOfGame()
     {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage(winner());
-        builder1.setCancelable(false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(winner());
+        builder.setCancelable(false);
 
-        builder1.setPositiveButton(
+        builder.setPositiveButton(
                 getString(R.string.play_again),
                 new DialogInterface.OnClickListener()
                 {
@@ -565,7 +601,7 @@ public class GameBoard extends AppCompatActivity
                     }
                 });
 
-        builder1.setNeutralButton(
+        builder.setNeutralButton(
                 getString(R.string.menu),
                 new DialogInterface.OnClickListener()
                 {
@@ -576,14 +612,15 @@ public class GameBoard extends AppCompatActivity
                     }
                 });
 
-        final AlertDialog alert11 = builder1.create();
+        final AlertDialog alertDialog = builder.create();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable()
         {
             @Override
             public void run()
             {
-                alert11.show();
+                alertDialog.show();
+                Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawableResource(R.drawable.gradient_background_msg);
             }
         }, VANISH_DELAY + DURATION_ANIM);
     }
@@ -657,6 +694,27 @@ public class GameBoard extends AppCompatActivity
             textView.setTextColor(Color.BLACK);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             textView.setTypeface(font);
+            final int finalI = i;
+            textView.setOnLongClickListener(new View.OnLongClickListener()
+            {
+                @Override
+                public boolean onLongClick(View v)
+                {
+                    playerIndex = finalI;
+                    changePlayer();
+                    GradientDrawable gd = new GradientDrawable(
+                            GradientDrawable.Orientation.BR_TL,
+                            finalPlayers.get(playerIndex).color);
+                    txtTimer.setText(finalPlayers.get(playerIndex).name);
+                    txtTimer.setBackground(gd);
+                    if (time > 0)
+                    {
+                        timer.cancel();
+                        startTimer();
+                    }
+                    return true;
+                }
+            });
             gridPlayers.addView(textView);
         }
     }
@@ -680,7 +738,7 @@ public class GameBoard extends AppCompatActivity
         }
     }
 
-    public String getEmojiByUnicode(int unicode)
+    static public String getEmojiByUnicode(int unicode)
     {
         return new String(Character.toChars(unicode));
     }
@@ -760,7 +818,7 @@ public class GameBoard extends AppCompatActivity
                     }
                 }
             }
-            else if (lang)// language mode
+            else
             {
                 ArrayList<String> lang1st = readLines("Decks/" + deck + "/Lang/" + language1 + "_" + langCode1 + "_" + countryCode1 + ".txt");
                 ArrayList<String> lang2nd = readLines("Decks/" + deck + "/Lang/" + language2 + "_" + langCode2 + "_" + countryCode2 + ".txt");
@@ -817,7 +875,7 @@ public class GameBoard extends AppCompatActivity
                     }
                 }
             }
-            else if (lang)// language mode
+            else
             {
                 ArrayList<String> lang1st = readLines("Decks/" + deck + "/Lang/" + language1 + "_" + langCode1 + "_" + countryCode1 + ".txt");
                 ArrayList<String> lang2nd = readLines("Decks/" + deck + "/Lang/" + language2 + "_" + langCode2 + "_" + countryCode2 + ".txt");

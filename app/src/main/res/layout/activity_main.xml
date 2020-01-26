@@ -202,7 +202,7 @@
         android:fontFamily="@font/slackey"
         android:gravity="center"
         android:text="@string/app_name"
-        android:textColor="#D2058370"
+        android:textColor="#F2A7295B"
         android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/gl1"
         app:layout_constraintEnd_toEndOf="parent"
