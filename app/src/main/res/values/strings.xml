@@ -52,6 +52,8 @@
     <string name="lang_init_fail">Languege speaker failed</string>
     <string name="email" translatable="false">myniprojects@gmail.com</string>
     <string name="credits_info">\tAll these beautiful images used in this app comes from:\nflaticon.com\nfreepik.com\n\n\tIf you have the rights to any pictures and do not want us to use them, please contact: %1$s</string>
-    <string name="first_game_msg">This is what the game board looks like. If you\'ve never played memory before, the main goal of the game is to collect as many pairs as possible. Each card has a picture and there is a second card on the board that matches it. Each player in his turn reveals 2 cards if they are the same, he gets another chance, if not the next player starts the next turn. Simple!\n\tDepending on your phone and android version, some languages may not work. \n\t(Tip: if you accidentally mistook the queue then holding down the name of the player will go to his queue)</string>
+    <string name="first_game_msg">\tThis is what the game board looks like. If you\'ve never played memory before, the main goal of the game is to collect as many pairs as possible. Each card has a picture and there is a second card on the board that matches it. Each player in his turn reveals 2 cards if they are the same, he gets another chance, if not the next player starts the next turn. Simple!\n\tDepending on your phone and android version, some languages may not work. \n\t(Tip: if you accidentally mistook the queue then holding down the name of the player will go to his queue)</string>
+    <string name="app_id_ad" translatable="false">ca-app-pub-8557833758890885~2201772062</string>
+    <string name="interstial_ad_unit" translatable="false">ca-app-pub-8557833758890885/2285532549</string>
 
 </resources>
