@@ -1,0 +1,59 @@
+Affenpinscher
+Beagle
+Azawakh
+Bichon Frise
+Basenji
+Bulldog
+Bedlington terrier
+Chihuahua
+Border collie
+Chow chow
+Borzoi
+Collie
+Boston terrier
+Corgi
+Brussels griffon
+Dachshund
+Bull terrier
+Dalmatian
+Canadian Eskimo
+Doberman
+Australian shepherd
+Cavalier King Charles spaniel
+Bloodhound
+Chinese crested
+Fox terrier
+German shepherd
+French bulldog
+Golden retriever
+Great Dane
+Labrador
+Havanese bichon
+Miniature schnauzer
+Irish wolfhound
+Newfoundland
+Jack Russell terrier
+Papillon
+Hungarian komondor
+Pharaoh hound
+Pitbull
+Mexican hairless dog
+Pomeranian
+Poodle
+Viringo
+Pug
+Saluki
+Puli
+Schipperke
+Rottweiler
+Scottish terrier
+Saint bernard
+Shih Tzu
+Samoyed
+Tibetan mastiff
+Shiba
+Turkish pointer
+Siberian husky
+Whippet
+White terrier
+Yorkshire terrier

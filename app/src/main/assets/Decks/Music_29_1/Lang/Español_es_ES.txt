@@ -1,0 +1,29 @@
+Acordeón
+Cornamusa
+Balalaica
+Banjo
+Guitarra electrica
+Berimbau
+Cabasa
+Clarinete
+Tambor
+Cucurucho
+Platillo
+Djembe
+Flauta
+cuerno
+Guitarra acustica
+Harmónica
+Arpa
+Teclado
+Lira
+Mandolina
+Maracas
+Melódica
+Piano de cola
+Saxofón
+Tambor
+Pandereta
+Triángulo
+Violín
+Xilófono

@@ -1,0 +1,25 @@
+Scooter
+Bicicleta
+Barco de vela
+Teleférico
+Camper
+De dos pisos
+Camión de comida
+Camión de la basura
+Helicóptero
+Limusina
+Motocicleta
+Yate
+Cohete
+Subterraneo
+Remolque
+Avión
+Autobús
+Taxi
+Camión de reparto
+Ambulancia
+Globo
+Coche de policía
+Camión de remolque
+Camión de cemento
+Coche

@@ -1,0 +1,20 @@
+Schaschlik
+Burrito
+Cupcake
+Krapfen
+Pommes frittes
+Gebratenes Huhn
+Hamburger
+Hotdog
+Eis
+Milchshake
+Nudeln
+Pfannkuchen
+Kuchen
+Pizza
+Brezel
+Sandwich
+Würstchen
+Cola
+Sushi
+Taco

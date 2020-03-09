@@ -1,0 +1,30 @@
+Archery
+Badminton
+Baseball
+Basketball
+Bowling
+Boxing
+Chess
+Cricket
+Dart
+Swordsmanship
+Football
+Golf
+Hockey
+Ice skating
+Kendo
+Lacrosse
+Polo
+Roller skating
+Rugby
+Shooting
+Skateboarding
+Skiing
+Snooker
+Surfing
+Swimming
+Table tennis
+Tennis
+Volleyball
+Weight lifting
+Windsurfing

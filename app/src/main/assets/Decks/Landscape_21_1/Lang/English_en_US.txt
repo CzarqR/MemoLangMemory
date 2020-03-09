@@ -1,0 +1,21 @@
+Beach
+Bridge
+Cape
+Castle
+Cityscape
+Desert
+Fields
+Forest
+Hills
+House
+Iceberg
+Island
+Mill
+Mountains
+Nuclear plant
+River
+Ruins
+Sea
+Village
+Waterfall
+Windmills

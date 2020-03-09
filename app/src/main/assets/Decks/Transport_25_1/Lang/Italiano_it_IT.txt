@@ -1,0 +1,25 @@
+Scooter
+Bicicletta
+Barca a vela
+Funivia
+Camper
+Autobus a due piani
+Camion di cibo
+Camion della spazzatura
+Elicottero
+Limousine
+Motociclo
+Yacht
+Razzo
+Metropolitana
+trailer
+Aereo
+Autobus
+Taxi
+Camion delle consegne
+Ambulanza
+Palloncino
+Auto della polizia
+Camion di rimorchio
+Camion di cemento
+Auto

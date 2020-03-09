@@ -1,0 +1,21 @@
+playa
+Puente
+capa
+Castillo
+Paisaje urbano
+Desierto
+Campos
+Bosque
+Colinas
+Casa
+Iceberg
+Isla
+Molino
+Montañas
+Planta nuclear
+Río
+Restos
+Mar
+Pueblo
+Cascada
+Molinos de viento

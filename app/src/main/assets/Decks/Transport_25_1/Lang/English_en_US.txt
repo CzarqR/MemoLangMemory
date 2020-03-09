@@ -1,0 +1,25 @@
+Scooter
+Bicycle
+Sailing boat
+Cable car
+Camper
+Double-decker
+Food truck
+Garbage truck
+Helicopter
+Limousine
+Motorcycle
+Yacht
+Rocket
+Subway
+Trailer
+Airplane
+Bus
+Taxi
+Delivery truck
+Ambulance
+Balloon
+Police car
+Tow truck
+Cement truck
+Car

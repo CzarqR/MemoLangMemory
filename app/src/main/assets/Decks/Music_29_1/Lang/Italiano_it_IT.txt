@@ -1,0 +1,29 @@
+Fisarmonica
+Cornamusa
+balalaica
+bangio
+Chitarra elettrica
+Berimbau
+Cabasa
+Clarinetto
+Tamburo
+Cornetta
+Piatto
+djembe
+Flauto
+Corno
+Chitarra acustica
+Armonica
+Arpa
+Tastiera
+Lira
+Mandolino
+maracas
+melodica
+pianoforte a coda
+Sassofono
+Tamburo
+Tamburello
+Triangolo
+Violino
+Xilofono

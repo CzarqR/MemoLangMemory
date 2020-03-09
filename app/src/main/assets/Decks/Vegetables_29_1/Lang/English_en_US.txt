@@ -1,0 +1,29 @@
+Tomato
+Cucumber
+Cabbage
+Radish
+Eggplant
+Pumpkin
+Bell pepper
+Corn
+Potato
+Broccoli
+Olives
+Cauliflower
+Ginger
+Garlic
+Spinach
+Asparagus
+Chili pepper
+Peas
+Carrot
+Turnip
+Beetroot
+Caper
+Dill
+Parsley
+Basil
+Leek
+Rhubarb
+Lettuce
+Horseradish

@@ -1,0 +1,29 @@
+Gospodarstwo
+Plony
+Kukurydza
+Krowa
+Kaczka
+Jajka
+Rolnik
+Biedronka
+Kurczak
+Kosa
+Mleko
+Świnia
+Owca
+Słonecznik
+Zraszacz
+Arbuz
+Stóg siana
+Taczka
+Marchewki
+Ser
+Nawóz
+Pszenica
+Rękawiczki
+Miód
+Pole
+Roślina
+Strach na wróble
+Ciągnik
+Wiatrak

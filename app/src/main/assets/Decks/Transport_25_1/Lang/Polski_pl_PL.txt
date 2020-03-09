@@ -1,0 +1,25 @@
+Skuter
+Rower
+Żaglówka
+Kolejka linowa
+Kamper
+Piętrowy autobus
+Furgonetka z żywnością
+Śmieciarka
+Śmigłowiec
+Limuzyna
+Motocykl
+Jacht
+Rakieta
+Metro
+Przyczepa
+Samolot
+Autobus
+Taxi
+Ciężarówka
+Karetka
+Balon
+Radiowóz
+Laweta
+Betoniarka
+Samochód

@@ -1,0 +1,29 @@
+Accordéon
+Cornemuse
+Balalaika
+Banjo
+Guitare électrique
+Berimbau
+Cabasa
+Clarinette
+Tambour
+Cornet
+Cymbale
+Djembé
+Flûte
+klaxon
+Guitare acoustique
+Harmonica
+Harpe
+Clavier
+Lyre
+Mandoline
+Maracas
+Melodica
+grand piano
+Saxophone
+Tambour
+Tambourin
+Triangle
+Violon
+Xylophone
